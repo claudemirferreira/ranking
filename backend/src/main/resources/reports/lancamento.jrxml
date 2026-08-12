@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="lancamento"
+              pageWidth="595"
+              pageHeight="842"
+              columnWidth="555"
+              leftMargin="20"
+              rightMargin="20"
+              topMargin="20"
+              bottomMargin="20"
+              uuid="c2d3e4f5-a6b7-8901-bcde-f12345678901">
+    <parameter name="TITULO" class="java.lang.String"/>
+    <parameter name="PERIODO" class="java.lang.String"/>
+    <parameter name="TURMA" class="java.lang.String"/>
+    <parameter name="ENCONTRO" class="java.lang.String"/>
+    <parameter name="LOGO" class="java.io.InputStream"/>
+    <field name="posicao" class="java.lang.Integer"/>
+    <field name="nome" class="java.lang.String"/>
+    <field name="total" class="java.math.BigDecimal"/>
+    <field name="criterio" class="java.lang.String"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="100" splitType="Stretch">
+            <image onErrorType="Blank" scaleImage="RetainShape">
+                <reportElement x="0" y="0" width="320" height="52" uuid="d1d1d1d1-0000-4000-8000-000000000001"/>
+                <imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
+            </image>
+            <staticText>
+                <reportElement x="0" y="56" width="555" height="16" uuid="e1e1e1e1-1111-4111-8111-111111111111"/>
+                <textElement>
+                    <font size="12" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Lançamento de notas — ordenado por total (maior → menor)]]></text>
+            </staticText>
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="74" width="555" height="14" uuid="f1f1f1f1-2222-4222-8222-222222222222"/>
+                <textElement>
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{TITULO} + "  |  Turma: " + $P{TURMA} + "  |  Período: " + $P{PERIODO}]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="88" width="555" height="12" uuid="a2a2a2a2-3333-4333-8333-333333333333"/>
+                <textElement>
+                    <font size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Encontro: " + $P{ENCONTRO}]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    <columnHeader>
+        <band height="24" splitType="Stretch">
+            <staticText>
+                <reportElement mode="Opaque" x="0" y="0" width="45" height="24" forecolor="#FFFFFF" backcolor="#0F766E" uuid="b2b2b2b2-4444-4444-8444-444444444444"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#FFFFFF"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+                </textElement>
+                <text><![CDATA[Pos.]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="45" y="0" width="175" height="24" forecolor="#FFFFFF" backcolor="#0F766E" uuid="d4d4d4d4-6666-4666-8666-666666666666"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#FFFFFF"/>
+                </box>
+                <textElement verticalAlignment="Middle">
+                    <font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+                    <paragraph leftIndent="4"/>
+                </textElement>
+                <text><![CDATA[Aluno]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="220" y="0" width="55" height="24" forecolor="#FFFFFF" backcolor="#0F766E" uuid="e5e5e5e5-7777-4777-8777-777777777777"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#FFFFFF"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+                </textElement>
+                <text><![CDATA[Total]]></text>
+            </staticText>
+            <staticText>
+                <reportElement mode="Opaque" x="275" y="0" width="280" height="24" forecolor="#FFFFFF" backcolor="#0F766E" uuid="f6f6f6f6-8888-4888-8888-888888888888"/>
+                <box>
+                    <pen lineWidth="0.5" lineColor="#FFFFFF"/>
+                </box>
+                <textElement verticalAlignment="Middle">
+                    <font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+                    <paragraph leftIndent="4"/>
+                </textElement>
+                <text><![CDATA[Critérios]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="28" splitType="Stretch">
+            <textField textAdjust="StretchHeight" isBlankWhenNull="true">
+                <reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="45" height="28" uuid="a7a7a7a7-9999-4999-8999-999999999991"/>
+                <box padding="3">
+                    <pen lineWidth="0.4" lineColor="#CBD5E1"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Top">
+                    <font size="9" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{posicao}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight" isBlankWhenNull="true">
+                <reportElement stretchType="RelativeToTallestObject" x="45" y="0" width="175" height="28" uuid="c9c9c9c9-bbbb-4bbb-8bbb-bbbbbbbbbbb3"/>
+                <box padding="3">
+                    <pen lineWidth="0.4" lineColor="#CBD5E1"/>
+                </box>
+                <textElement verticalAlignment="Top">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight" isBlankWhenNull="true">
+                <reportElement stretchType="RelativeToTallestObject" x="220" y="0" width="55" height="28" uuid="dadadada-cccc-4ccc-8ccc-ccccccccccc4"/>
+                <box padding="3">
+                    <pen lineWidth="0.4" lineColor="#CBD5E1"/>
+                </box>
+                <textElement textAlignment="Center" verticalAlignment="Top">
+                    <font size="9" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+            </textField>
+            <textField textAdjust="StretchHeight" isBlankWhenNull="true">
+                <reportElement stretchType="RelativeToTallestObject" x="275" y="0" width="280" height="28" uuid="ebebebeb-dddd-4ddd-8ddd-ddddddddddd5"/>
+                <box padding="3">
+                    <pen lineWidth="0.4" lineColor="#CBD5E1"/>
+                </box>
+                <textElement verticalAlignment="Top">
+                    <font size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{criterio}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <pageFooter>
+        <band height="20" splitType="Stretch">
+            <textField>
+                <reportElement x="0" y="0" width="555" height="16" uuid="fcfcfcfc-eeee-4eee-8eee-eeeeeeeeeee6"/>
+                <textElement textAlignment="Right">
+                    <font size="8"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+</jasperReport>
