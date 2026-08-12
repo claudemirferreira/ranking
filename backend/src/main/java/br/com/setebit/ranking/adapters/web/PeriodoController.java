@@ -8,6 +8,7 @@ import br.com.setebit.ranking.application.dto.EncontroResponse;
 import br.com.setebit.ranking.application.dto.NotaResponse;
 import br.com.setebit.ranking.application.dto.PeriodoResponse;
 import br.com.setebit.ranking.application.dto.RankingItemResponse;
+import br.com.setebit.ranking.application.port.in.ExportLancamentoPdfUseCase;
 import br.com.setebit.ranking.application.port.in.ExportRankingPdfUseCase;
 import br.com.setebit.ranking.application.port.in.GetRankingUseCase;
 import br.com.setebit.ranking.application.port.in.ManageNotaUseCase;
@@ -37,16 +38,19 @@ public class PeriodoController {
 	private final ManageNotaUseCase manageNotaUseCase;
 	private final GetRankingUseCase getRankingUseCase;
 	private final ExportRankingPdfUseCase exportRankingPdfUseCase;
+	private final ExportLancamentoPdfUseCase exportLancamentoPdfUseCase;
 
 	public PeriodoController(
 			ManagePeriodoUseCase managePeriodoUseCase,
 			ManageNotaUseCase manageNotaUseCase,
 			GetRankingUseCase getRankingUseCase,
-			ExportRankingPdfUseCase exportRankingPdfUseCase) {
+			ExportRankingPdfUseCase exportRankingPdfUseCase,
+			ExportLancamentoPdfUseCase exportLancamentoPdfUseCase) {
 		this.managePeriodoUseCase = managePeriodoUseCase;
 		this.manageNotaUseCase = manageNotaUseCase;
 		this.getRankingUseCase = getRankingUseCase;
 		this.exportRankingPdfUseCase = exportRankingPdfUseCase;
+		this.exportLancamentoPdfUseCase = exportLancamentoPdfUseCase;
 	}
 
 	@GetMapping("/api/turmas/{turmaId}/periodos")
@@ -128,6 +132,20 @@ public class PeriodoController {
 		byte[] pdf = exportRankingPdfUseCase.execute(periodoId);
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"ranking-periodo-" + periodoId + ".pdf\"")
+				.contentType(MediaType.APPLICATION_PDF)
+				.body(pdf);
+	}
+
+	@GetMapping("/api/periodos/{periodoId}/encontros/{encontroId}/lancamento/pdf")
+	@Operation(summary = "Imprimir lançamento do encontro em PDF (ordenado por total decrescente)")
+	public ResponseEntity<byte[]> lancamentoPdf(
+			@PathVariable Long periodoId,
+			@PathVariable Long encontroId) {
+		byte[] pdf = exportLancamentoPdfUseCase.execute(periodoId, encontroId);
+		return ResponseEntity.ok()
+				.header(
+						HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"lancamento-periodo-" + periodoId + "-encontro-" + encontroId + ".pdf\"")
 				.contentType(MediaType.APPLICATION_PDF)
 				.body(pdf);
 	}
