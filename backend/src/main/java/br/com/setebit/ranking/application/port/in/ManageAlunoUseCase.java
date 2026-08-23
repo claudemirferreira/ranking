@@ -1,13 +1,14 @@
 package br.com.setebit.ranking.application.port.in;
 
 import br.com.setebit.ranking.application.dto.AlunoResponse;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ManageAlunoUseCase {
 
-	AlunoResponse create(Long turmaId, Integer numero, String nome);
+	AlunoResponse create(Long turmaId, String nome, LocalDate dataNascimento);
 
-	AlunoResponse update(Long id, Integer numero, String nome);
+	AlunoResponse update(Long id, String nome, LocalDate dataNascimento);
 
 	AlunoResponse getById(Long id);
 

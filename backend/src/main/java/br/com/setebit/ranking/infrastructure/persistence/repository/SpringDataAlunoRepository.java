@@ -6,9 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SpringDataAlunoRepository extends JpaRepository<AlunoJpaEntity, Long> {
 
-	List<AlunoJpaEntity> findAllByOrderByTurmaIdAscNumeroAscNomeAsc();
+	List<AlunoJpaEntity> findAllByOrderByTurmaIdAscNomeAsc();
 
-	List<AlunoJpaEntity> findByTurmaIdOrderByNumeroAscNomeAsc(Long turmaId);
+	List<AlunoJpaEntity> findByTurmaIdOrderByNomeAsc(Long turmaId);
 
-	List<AlunoJpaEntity> findByTurmaIdAndAtivoTrueOrderByNumeroAscNomeAsc(Long turmaId);
+	List<AlunoJpaEntity> findByTurmaIdAndAtivoTrueOrderByNomeAsc(Long turmaId);
 }

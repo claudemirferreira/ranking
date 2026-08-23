@@ -9,6 +9,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "alunos")
@@ -21,10 +22,10 @@ public class AlunoJpaEntity {
 	@Column(nullable = false)
 	private Long turmaId;
 
-	private Integer numero;
-
 	@Column(nullable = false, length = 120)
 	private String nome;
+
+	private LocalDate dataNascimento;
 
 	@Column(nullable = false)
 	private boolean ativo = true;
@@ -65,20 +66,20 @@ public class AlunoJpaEntity {
 		this.turmaId = turmaId;
 	}
 
-	public Integer getNumero() {
-		return numero;
-	}
-
-	public void setNumero(Integer numero) {
-		this.numero = numero;
-	}
-
 	public String getNome() {
 		return nome;
 	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public LocalDate getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(LocalDate dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 	public boolean isAtivo() {

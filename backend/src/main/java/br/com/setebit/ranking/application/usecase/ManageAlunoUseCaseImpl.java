@@ -9,6 +9,7 @@ import br.com.setebit.ranking.domain.exception.ResourceNotFoundException;
 import br.com.setebit.ranking.domain.model.Aluno;
 import br.com.setebit.ranking.domain.model.Turma;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +27,13 @@ public class ManageAlunoUseCaseImpl implements ManageAlunoUseCase {
 	}
 
 	@Override
-	public AlunoResponse create(Long turmaId, Integer numero, String nome) {
+	public AlunoResponse create(Long turmaId, String nome, LocalDate dataNascimento) {
 		requireTurma(turmaId);
 		Instant now = Instant.now();
 		Aluno aluno = new Aluno();
 		aluno.setTurmaId(turmaId);
-		aluno.setNumero(numero);
 		aluno.setNome(nome.trim());
+		aluno.setDataNascimento(dataNascimento);
 		aluno.setAtivo(true);
 		aluno.setCreatedAt(now);
 		aluno.setUpdatedAt(now);
@@ -40,10 +41,10 @@ public class ManageAlunoUseCaseImpl implements ManageAlunoUseCase {
 	}
 
 	@Override
-	public AlunoResponse update(Long id, Integer numero, String nome) {
+	public AlunoResponse update(Long id, String nome, LocalDate dataNascimento) {
 		Aluno aluno = requireAluno(id);
-		aluno.setNumero(numero);
 		aluno.setNome(nome.trim());
+		aluno.setDataNascimento(dataNascimento);
 		aluno.setUpdatedAt(Instant.now());
 		return ApplicationMapper.toResponse(alunoRepository.save(aluno));
 	}

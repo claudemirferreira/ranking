@@ -29,17 +29,17 @@ public class AlunoRepositoryAdapter implements AlunoRepositoryPort {
 
 	@Override
 	public List<Aluno> findAll() {
-		return repository.findAllByOrderByTurmaIdAscNumeroAscNomeAsc().stream().map(JpaMapper::toDomain).toList();
+		return repository.findAllByOrderByTurmaIdAscNomeAsc().stream().map(JpaMapper::toDomain).toList();
 	}
 
 	@Override
 	public List<Aluno> findByTurmaId(Long turmaId) {
-		return repository.findByTurmaIdOrderByNumeroAscNomeAsc(turmaId).stream().map(JpaMapper::toDomain).toList();
+		return repository.findByTurmaIdOrderByNomeAsc(turmaId).stream().map(JpaMapper::toDomain).toList();
 	}
 
 	@Override
 	public List<Aluno> findActiveByTurmaId(Long turmaId) {
-		return repository.findByTurmaIdAndAtivoTrueOrderByNumeroAscNomeAsc(turmaId).stream()
+		return repository.findByTurmaIdAndAtivoTrueOrderByNomeAsc(turmaId).stream()
 				.map(JpaMapper::toDomain)
 				.toList();
 	}

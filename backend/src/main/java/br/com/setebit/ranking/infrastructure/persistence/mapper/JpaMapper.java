@@ -46,8 +46,8 @@ public final class JpaMapper {
 		Aluno aluno = new Aluno();
 		aluno.setId(entity.getId());
 		aluno.setTurmaId(entity.getTurmaId());
-		aluno.setNumero(entity.getNumero());
 		aluno.setNome(entity.getNome());
+		aluno.setDataNascimento(entity.getDataNascimento());
 		aluno.setAtivo(entity.isAtivo());
 		aluno.setCreatedAt(entity.getCreatedAt());
 		aluno.setUpdatedAt(entity.getUpdatedAt());
@@ -58,8 +58,8 @@ public final class JpaMapper {
 		AlunoJpaEntity entity = new AlunoJpaEntity();
 		entity.setId(domain.getId());
 		entity.setTurmaId(domain.getTurmaId());
-		entity.setNumero(domain.getNumero());
 		entity.setNome(domain.getNome());
+		entity.setDataNascimento(domain.getDataNascimento());
 		entity.setAtivo(domain.isAtivo());
 		entity.setCreatedAt(domain.getCreatedAt());
 		entity.setUpdatedAt(domain.getUpdatedAt());

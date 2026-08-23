@@ -1,13 +1,14 @@
 package br.com.setebit.ranking.domain.model;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 public class Aluno {
 
 	private Long id;
 	private Long turmaId;
-	private Integer numero;
 	private String nome;
+	private LocalDate dataNascimento;
 	private boolean ativo = true;
 	private Instant createdAt;
 	private Instant updatedAt;
@@ -28,20 +29,20 @@ public class Aluno {
 		this.turmaId = turmaId;
 	}
 
-	public Integer getNumero() {
-		return numero;
-	}
-
-	public void setNumero(Integer numero) {
-		this.numero = numero;
-	}
-
 	public String getNome() {
 		return nome;
 	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public LocalDate getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(LocalDate dataNascimento) {
+		this.dataNascimento = dataNascimento;
 	}
 
 	public boolean isAtivo() {

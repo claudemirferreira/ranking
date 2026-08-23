@@ -57,7 +57,6 @@ class RankingCalculatorTest {
 		Aluno aluno = new Aluno();
 		aluno.setId(id);
 		aluno.setNome(nome);
-		aluno.setNumero(id.intValue());
 		aluno.setAtivo(ativo);
 		return aluno;
 	}

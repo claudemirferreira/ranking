@@ -35,7 +35,7 @@ public class RankingCalculator {
 					.sorted(Comparator.comparingInt(Criterio::getOrdem))
 					.map(c -> new CriterioTotal(c.getId(), c.getNome(), criteriosAluno.getOrDefault(c.getId(), BigDecimal.ZERO)))
 					.toList();
-			entries.add(new RankingEntry(aluno.getId(), aluno.getNumero(), aluno.getNome(), total, detalhe));
+			entries.add(new RankingEntry(aluno.getId(), aluno.getNome(), total, detalhe));
 		}
 
 		entries.sort(Comparator
@@ -45,7 +45,7 @@ public class RankingCalculator {
 		List<RankingEntry> ranked = new ArrayList<>(entries.size());
 		for (int i = 0; i < entries.size(); i++) {
 			RankingEntry e = entries.get(i);
-			ranked.add(new RankingEntry(i + 1, e.alunoId(), e.numero(), e.nome(), e.total(), e.porCriterio()));
+			ranked.add(new RankingEntry(i + 1, e.alunoId(), e.nome(), e.total(), e.porCriterio()));
 		}
 		return ranked;
 	}
@@ -56,13 +56,12 @@ public class RankingCalculator {
 	public record RankingEntry(
 			int posicao,
 			Long alunoId,
-			Integer numero,
 			String nome,
 			BigDecimal total,
 			List<CriterioTotal> porCriterio
 	) {
-		public RankingEntry(Long alunoId, Integer numero, String nome, BigDecimal total, List<CriterioTotal> porCriterio) {
-			this(0, alunoId, numero, nome, total, porCriterio);
+		public RankingEntry(Long alunoId, String nome, BigDecimal total, List<CriterioTotal> porCriterio) {
+			this(0, alunoId, nome, total, porCriterio);
 		}
 
 		public RankingEntry {

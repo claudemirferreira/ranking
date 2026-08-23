@@ -50,7 +50,6 @@ public class GetRankingUseCaseImpl implements GetRankingUseCase {
 				.map(e -> new RankingItemResponse(
 						e.posicao(),
 						e.alunoId(),
-						e.numero(),
 						e.nome(),
 						e.total(),
 						e.porCriterio().stream()
