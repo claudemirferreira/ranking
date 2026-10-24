@@ -12,7 +12,7 @@
               bottomMargin="20"
               uuid="a1b2c3d4-e5f6-7890-abcd-ef1234567890">
     <parameter name="TITULO" class="java.lang.String"/>
-    <parameter name="PERIODO" class="java.lang.String"/>
+    <parameter name="TRIMESTRE" class="java.lang.String"/>
     <parameter name="TURMA" class="java.lang.String"/>
     <parameter name="LOGO" class="java.io.InputStream"/>
     <field name="nome" class="java.lang.String"/>
@@ -39,7 +39,7 @@
                 <textElement>
                     <font size="9"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$P{TITULO} + "  |  Turma: " + $P{TURMA} + "  |  Período: " + $P{PERIODO}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{TITULO} + "  |  Turma: " + $P{TURMA} + "  |  Trimestre: " + $P{TRIMESTRE}]]></textFieldExpression>
             </textField>
         </band>
     </title>

@@ -12,7 +12,7 @@
               bottomMargin="20"
               uuid="c2d3e4f5-a6b7-8901-bcde-f12345678901">
     <parameter name="TITULO" class="java.lang.String"/>
-    <parameter name="PERIODO" class="java.lang.String"/>
+    <parameter name="TRIMESTRE" class="java.lang.String"/>
     <parameter name="TURMA" class="java.lang.String"/>
     <parameter name="ENCONTRO" class="java.lang.String"/>
     <parameter name="LOGO" class="java.io.InputStream"/>
@@ -41,7 +41,7 @@
                 <textElement>
                     <font size="9"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$P{TITULO} + "  |  Turma: " + $P{TURMA} + "  |  Período: " + $P{PERIODO}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{TITULO} + "  |  Turma: " + $P{TURMA} + "  |  Trimestre: " + $P{TRIMESTRE}]]></textFieldExpression>
             </textField>
             <textField isBlankWhenNull="true">
                 <reportElement x="0" y="88" width="555" height="12" uuid="a2a2a2a2-3333-4333-8333-333333333333"/>

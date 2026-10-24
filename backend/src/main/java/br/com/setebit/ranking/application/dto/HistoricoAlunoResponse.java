@@ -6,7 +6,7 @@ import java.util.List;
 public record HistoricoAlunoResponse(
 		Long alunoId,
 		String nome,
-		Long periodoId,
+		Long trimestreId,
 		BigDecimal total,
 		List<NotaResponse> notas
 ) {

@@ -16,8 +16,8 @@ public class CriterioJpaEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private Long periodoId;
+	@Column(name = "trimestre_id", nullable = false)
+	private Long trimestreId;
 
 	@Column(nullable = false, length = 120)
 	private String nome;
@@ -36,12 +36,12 @@ public class CriterioJpaEntity {
 		this.id = id;
 	}
 
-	public Long getPeriodoId() {
-		return periodoId;
+	public Long getTrimestreId() {
+		return trimestreId;
 	}
 
-	public void setPeriodoId(Long periodoId) {
-		this.periodoId = periodoId;
+	public void setTrimestreId(Long trimestreId) {
+		this.trimestreId = trimestreId;
 	}
 
 	public String getNome() {

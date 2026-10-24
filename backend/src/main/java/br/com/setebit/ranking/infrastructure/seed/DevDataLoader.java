@@ -1,7 +1,7 @@
 package br.com.setebit.ranking.infrastructure.seed;
 
 import br.com.setebit.ranking.application.port.in.ManageAlunoUseCase;
-import br.com.setebit.ranking.application.port.in.ManagePeriodoUseCase;
+import br.com.setebit.ranking.application.port.in.ManageTrimestreUseCase;
 import br.com.setebit.ranking.application.port.in.ManageTurmaUseCase;
 import br.com.setebit.ranking.application.port.out.TurmaRepositoryPort;
 import java.math.BigDecimal;
@@ -22,17 +22,17 @@ public class DevDataLoader implements ApplicationRunner {
 	private final TurmaRepositoryPort turmaRepository;
 	private final ManageTurmaUseCase manageTurmaUseCase;
 	private final ManageAlunoUseCase manageAlunoUseCase;
-	private final ManagePeriodoUseCase managePeriodoUseCase;
+	private final ManageTrimestreUseCase manageTrimestreUseCase;
 
 	public DevDataLoader(
 			TurmaRepositoryPort turmaRepository,
 			ManageTurmaUseCase manageTurmaUseCase,
 			ManageAlunoUseCase manageAlunoUseCase,
-			ManagePeriodoUseCase managePeriodoUseCase) {
+			ManageTrimestreUseCase manageTrimestreUseCase) {
 		this.turmaRepository = turmaRepository;
 		this.manageTurmaUseCase = manageTurmaUseCase;
 		this.manageAlunoUseCase = manageAlunoUseCase;
-		this.managePeriodoUseCase = managePeriodoUseCase;
+		this.manageTrimestreUseCase = manageTrimestreUseCase;
 	}
 
 	@Override
@@ -61,13 +61,13 @@ public class DevDataLoader implements ApplicationRunner {
 						new SeedAluno(22, "João Arthur"))
 				.forEach(a -> manageAlunoUseCase.create(turma.id(), a.numero(), a.nome(), null));
 
-		var periodo = managePeriodoUseCase.create(turma.id(), "Lição 3", null, null);
-		managePeriodoUseCase.createEncontros(periodo.id(), 13);
-		managePeriodoUseCase.createCriterio(periodo.id(), "Critério A", 1, BigDecimal.TEN);
-		managePeriodoUseCase.createCriterio(periodo.id(), "Critério B", 2, BigDecimal.TEN);
-		managePeriodoUseCase.createCriterio(periodo.id(), "Critério C", 3, BigDecimal.TEN);
+		var trimestre = manageTrimestreUseCase.create(turma.id(), "Lição 3", null, null);
+		manageTrimestreUseCase.createEncontros(trimestre.id(), 13);
+		manageTrimestreUseCase.createCriterio(trimestre.id(), "Critério A", 1, BigDecimal.TEN);
+		manageTrimestreUseCase.createCriterio(trimestre.id(), "Critério B", 2, BigDecimal.TEN);
+		manageTrimestreUseCase.createCriterio(trimestre.id(), "Critério C", 3, BigDecimal.TEN);
 
-		log.info("Seed concluído: turma Juvenis, 15 alunos, período com 13 sábados e 3 critérios");
+		log.info("Seed concluído: turma Juvenis, 15 alunos, trimestre com 13 sábados e 3 critérios");
 	}
 
 	private record SeedAluno(int numero, String nome) {

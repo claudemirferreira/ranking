@@ -12,11 +12,11 @@ public interface NotaRepositoryPort {
 
 	Optional<Nota> findByAlunoIdAndEncontroIdAndCriterioId(Long alunoId, Long encontroId, Long criterioId);
 
-	List<Nota> findByPeriodoId(Long periodoId);
+	List<Nota> findByTrimestreId(Long trimestreId);
 
-	List<Nota> findByPeriodoIdFiltered(Long periodoId, Long encontroId, Long criterioId);
+	List<Nota> findByTrimestreIdFiltered(Long trimestreId, Long encontroId, Long criterioId);
 
-	List<Nota> findByAlunoIdAndPeriodoId(Long alunoId, Long periodoId);
+	List<Nota> findByAlunoIdAndTrimestreId(Long alunoId, Long trimestreId);
 
 	void deleteByAlunoId(Long alunoId);
 }

@@ -7,6 +7,8 @@ Referência de domínio: planilha "Tabela de Pontuação – Classe dos Juvenis"
 
 Como funciona cada trimestre da Escola Sabatina (13 sábados, lição, 13º sábado e cartão de pontos): `doc/PROMPT_ESCOLA_SABATINA.md`.
 
+O tipo no código é trimestre (antes chamado de período). Tarefas dessa troca: `doc/PROMPT_REFACTOR_TRIMESTRE.md`.
+
 Projeto atual:
 - Path: `c:\work\setebit\ranking\backend`
 - Stack: **Spring Boot 4.0.x**, **Java 25**, Spring Web MVC (`spring-boot-starter-webmvc`), Spring Data JPA, MySQL 8.4
@@ -24,7 +26,7 @@ Projeto atual:
 ## Objetivo do produto
 Permitir que professores/dirigentes:
 1. Cadastrem turmas e alunos
-2. Cadastrem encontros (sábados) de um período
+2. Cadastrem encontros (sábados) de um trimestre
 3. Definam critérios de pontuação (ex.: presença, lição, comportamento — a planilha tem 3 blocos de sábados)
 4. Lancem notas por aluno/encontro/critério de forma rápida
 5. Consultem ranking e total por aluno automaticamente
@@ -32,28 +34,28 @@ Permitir que professores/dirigentes:
 
 ## Regras de negócio
 - Uma **Turma** (ex.: Juvenis) possui vários **Alunos**.
-- Um **Período** (ex.: trimestre, lição 1–13) pertence a uma turma e contém vários **Encontros** (Sábado 1…N) com data opcional.
-- Cada período tem um ou mais **Critérios** de pontuação (nome + ordem + pontuação máxima padrão, ex.: 10).
+- Um **Trimestre** (ex.: "Lição 4") pertence a uma turma e contém vários **Encontros** (Sábado 1…N) com data opcional.
+- Cada trimestre tem um ou mais **Critérios** de pontuação (nome + ordem + pontuação máxima padrão, ex.: 10).
 - Uma **Nota** é única por combinação (aluno + encontro + critério).
 - Valor da nota: numérico decimal; na prática costuma ser 0 ou 10, mas aceitar 0 até o máximo do critério.
-- **Total do aluno no período** = soma de todas as notas do aluno naquele período.
-- **Ranking** = ordenação dos alunos ativos da turma/período por total decrescente; em empate, ordenar por nome.
+- **Total do aluno no trimestre** = soma de todas as notas do aluno naquele trimestre.
+- **Ranking** = ordenação dos alunos ativos da turma/trimestre por total decrescente; em empate, ordenar por nome.
 - Aluno pode ser inativado (não some do histórico, mas **não aparece** no ranking).
 - Soft-delete em turmas (`excluidoEm`); alunos usam flag `ativo`.
 
 ## Modelo de dados
 - `Turma`: id, nome, descricao, ativo, excluidoEm, createdAt, updatedAt
 - `Aluno`: id, turmaId, numero (opcional), nome, ativo, createdAt, updatedAt
-- `Periodo`: id, turmaId, nome (ex.: "Lição 3"), dataInicio, dataFim, ativo
-- `Encontro`: id, periodoId, numero (1..N), data (opcional), titulo (ex.: "Sábado 5")
-- `Criterio`: id, periodoId, nome, ordem, pontuacaoMaxima (default 10)
+- `Trimestre`: id, turmaId, nome (ex.: "Lição 3"), dataInicio, dataFim, ativo
+- `Encontro`: id, trimestreId, numero (1..N), data (opcional), titulo (ex.: "Sábado 5")
+- `Criterio`: id, trimestreId, nome, ordem, pontuacaoMaxima (default 10)
 - `Nota`: id, alunoId, encontroId, criterioId, valor, observacao (opcional), lançadoEm, atualizadoEm  
   Constraint unique: (aluno_id, encontro_id, criterio_id)
 
 Seeds iniciais (profile `dev`, `ranking.seed.enabled=true`):
 - Turma: Juvenis
 - Alunos da planilha: Luísa, Júlia, Sofhia, Adrielly, Lorena, Valentina, Esther, João, Isaque, João Levi, Vitória, Manuela, João Pedro, João Lucas, João Arthur
-- Período com 13 encontros (Sábado 1–13)
+- Trimestre com 13 encontros (Sábado 1–13)
 - 3 critérios genéricos (Critério A, B e C)
 
 ## API REST
@@ -76,22 +78,22 @@ OpenAPI JSON: `http://localhost:8080/v3/api-docs`
 - `PUT /api/alunos/{id}`
 - `PATCH /api/alunos/{id}/ativo` (ativar/inativar)
 
-### Períodos / Encontros / Critérios
-- `GET|POST /api/turmas/{turmaId}/periodos`
-- `GET|PUT /api/periodos/{id}`
-- `POST /api/periodos/{id}/encontros` (criar em lote: quantidade N)
-- `GET /api/periodos/{id}/encontros`
-- `GET|POST /api/periodos/{id}/criterios`
+### Trimestres / Encontros / Critérios
+- `GET|POST /api/turmas/{turmaId}/trimestres`
+- `GET|PUT /api/trimestres/{id}`
+- `POST /api/trimestres/{id}/encontros` (criar em lote: quantidade N)
+- `GET /api/trimestres/{id}/encontros`
+- `GET|POST /api/trimestres/{id}/criterios`
 - `PUT /api/criterios/{id}`
 
 ### Notas (lançamento)
 - `PUT /api/notas` — upsert de uma nota `{ alunoId, encontroId, criterioId, valor, observacao? }`
 - `PUT /api/notas/lote` — upsert em lote (tela de lançamento do sábado)
-- `GET /api/periodos/{periodoId}/notas?encontroId=&criterioId=` — grade para a tela
-- `GET /api/alunos/{alunoId}/historico?periodoId=` — notas + totais do aluno
+- `GET /api/trimestres/{trimestreId}/notas?encontroId=&criterioId=` — grade para a tela
+- `GET /api/alunos/{alunoId}/historico?trimestreId=` — notas + totais do aluno
 
 ### Ranking
-- `GET /api/periodos/{periodoId}/ranking`  
+- `GET /api/trimestres/{trimestreId}/ranking`  
   Resposta: lista `{ posicao, alunoId, numero, nome, total, porCriterio?: { criterioId, total } }`
 
 ## Infraestrutura: MySQL + Docker Compose + Swagger
@@ -157,12 +159,12 @@ Dependências **sempre apontando para dentro** (domínio no centro). Frameworks 
 ```text
 br.com.setebit.ranking
 ├── domain                      # Entidades e regras puras (sem Spring/JPA)
-│   ├── model                   # Turma, Aluno, Periodo, Encontro, Criterio, Nota...
+│   ├── model                   # Turma, Aluno, Trimestre, Encontro, Criterio, Nota...
 │   ├── exception               # DomainException, ResourceNotFoundException, BusinessRuleException
 │   └── service                 # RankingCalculator (puro)
 ├── application                 # Casos de uso (orquestração)
 │   ├── port
-│   │   ├── in                  # ManageTurmaUseCase, ManageAlunoUseCase, ManagePeriodoUseCase, ManageNotaUseCase, GetRankingUseCase
+│   │   ├── in                  # ManageTurmaUseCase, ManageAlunoUseCase, ManageTrimestreUseCase, ManageNotaUseCase, GetRankingUseCase
 │   │   └── out                 # Repositórios (TurmaRepository, AlunoRepository, ...)
 │   ├── usecase                 # Implementações @Service
 │   ├── dto                     # Responses dos use cases
@@ -211,7 +213,7 @@ Regras de dependência:
 ## Critérios de aceite
 - [x] CRUD de turma e aluno funcionando
 - [x] `GET /api/alunos` lista todos os alunos cadastrados
-- [x] Criar período com 13 sábados e 3 critérios
+- [x] Criar trimestre com 13 sábados e 3 critérios
 - [x] Lançar notas em lote para um sábado
 - [x] Ranking reflete somas corretamente após updates
 - [x] Aluno inativo não aparece no ranking
@@ -244,14 +246,14 @@ docker compose up -d
 Fluxo manual sugerido (Swagger ou HTTP):
 1. `GET /api/turmas` — usar seed Juvenis ou criar turma
 2. `GET /api/alunos` — listar todos os alunos (ou `GET /api/turmas/{id}/alunos` por turma)
-3. `GET /api/turmas/{id}/periodos` — obter período
+3. `GET /api/turmas/{id}/trimestres` — obter trimestre
 4. `PUT /api/notas` ou `PUT /api/notas/lote` — lançar pontos
-5. `GET /api/periodos/{id}/ranking` — conferir ordenação/totais
-6. `GET /api/alunos/{id}/historico?periodoId=` — histórico
+5. `GET /api/trimestres/{id}/ranking` — conferir ordenação/totais
+6. `GET /api/alunos/{id}/historico?trimestreId=` — histórico
 
 ## Evoluções futuras (opcional)
 1. Spring Security + roles (professor / dirigente)
 2. Migrations (Flyway ou Liquibase) e FKs no banco
 3. Dockerfile + serviço `app` no Compose
-4. Ampliar cobertura de testes (use cases de nota/período, integração)
+4. Ampliar cobertura de testes (use cases de nota/trimestre, integração)
 5. Importação da planilha Excel

@@ -5,12 +5,12 @@ import br.com.setebit.ranking.application.port.in.GetEvolucaoPontuacaoUseCase;
 import br.com.setebit.ranking.application.port.out.AlunoRepositoryPort;
 import br.com.setebit.ranking.application.port.out.EncontroRepositoryPort;
 import br.com.setebit.ranking.application.port.out.NotaRepositoryPort;
-import br.com.setebit.ranking.application.port.out.PeriodoRepositoryPort;
+import br.com.setebit.ranking.application.port.out.TrimestreRepositoryPort;
 import br.com.setebit.ranking.domain.exception.ResourceNotFoundException;
 import br.com.setebit.ranking.domain.model.Aluno;
 import br.com.setebit.ranking.domain.model.Encontro;
 import br.com.setebit.ranking.domain.model.Nota;
-import br.com.setebit.ranking.domain.model.Periodo;
+import br.com.setebit.ranking.domain.model.Trimestre;
 import br.com.setebit.ranking.domain.service.EvolucaoPontuacaoCalculator;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -20,31 +20,31 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class GetEvolucaoPontuacaoUseCaseImpl implements GetEvolucaoPontuacaoUseCase {
 
-	private final PeriodoRepositoryPort periodoRepository;
+	private final TrimestreRepositoryPort trimestreRepository;
 	private final AlunoRepositoryPort alunoRepository;
 	private final EncontroRepositoryPort encontroRepository;
 	private final NotaRepositoryPort notaRepository;
 	private final EvolucaoPontuacaoCalculator calculator = new EvolucaoPontuacaoCalculator();
 
 	public GetEvolucaoPontuacaoUseCaseImpl(
-			PeriodoRepositoryPort periodoRepository,
+			TrimestreRepositoryPort trimestreRepository,
 			AlunoRepositoryPort alunoRepository,
 			EncontroRepositoryPort encontroRepository,
 			NotaRepositoryPort notaRepository) {
-		this.periodoRepository = periodoRepository;
+		this.trimestreRepository = trimestreRepository;
 		this.alunoRepository = alunoRepository;
 		this.encontroRepository = encontroRepository;
 		this.notaRepository = notaRepository;
 	}
 
 	@Override
-	public EvolucaoPontuacaoResponse execute(Long periodoId) {
-		Periodo periodo = periodoRepository.findById(periodoId)
-				.orElseThrow(() -> new ResourceNotFoundException("Período não encontrado: " + periodoId));
+	public EvolucaoPontuacaoResponse execute(Long trimestreId) {
+		Trimestre trimestre = trimestreRepository.findById(trimestreId)
+				.orElseThrow(() -> new ResourceNotFoundException("Trimestre não encontrado: " + trimestreId));
 
-		List<Aluno> alunos = alunoRepository.findActiveByTurmaId(periodo.getTurmaId());
-		List<Encontro> encontros = encontroRepository.findByPeriodoId(periodoId);
-		List<Nota> notas = notaRepository.findByPeriodoId(periodoId);
+		List<Aluno> alunos = alunoRepository.findActiveByTurmaId(trimestre.getTurmaId());
+		List<Encontro> encontros = encontroRepository.findByTrimestreId(trimestreId);
+		List<Nota> notas = notaRepository.findByTrimestreId(trimestreId);
 
 		EvolucaoPontuacaoCalculator.Evolucao evolucao = calculator.calculate(alunos, encontros, notas);
 		return new EvolucaoPontuacaoResponse(

@@ -35,12 +35,12 @@ public class EncontroRepositoryAdapter implements EncontroRepositoryPort {
 	}
 
 	@Override
-	public List<Encontro> findByPeriodoId(Long periodoId) {
-		return repository.findByPeriodoIdOrderByNumeroAsc(periodoId).stream().map(JpaMapper::toDomain).toList();
+	public List<Encontro> findByTrimestreId(Long trimestreId) {
+		return repository.findByTrimestreIdOrderByNumeroAsc(trimestreId).stream().map(JpaMapper::toDomain).toList();
 	}
 
 	@Override
-	public int countByPeriodoId(Long periodoId) {
-		return repository.countByPeriodoId(periodoId);
+	public int countByTrimestreId(Long trimestreId) {
+		return repository.countByTrimestreId(trimestreId);
 	}
 }

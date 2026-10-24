@@ -13,27 +13,27 @@ public interface SpringDataNotaRepository extends JpaRepository<NotaJpaEntity, L
 
 	@Query("""
 			select n from NotaJpaEntity n
-			where n.encontroId in (select e.id from EncontroJpaEntity e where e.periodoId = :periodoId)
+			where n.encontroId in (select e.id from EncontroJpaEntity e where e.trimestreId = :trimestreId)
 			""")
-	List<NotaJpaEntity> findByPeriodoId(@Param("periodoId") Long periodoId);
+	List<NotaJpaEntity> findByTrimestreId(@Param("trimestreId") Long trimestreId);
 
 	@Query("""
 			select n from NotaJpaEntity n
-			where n.encontroId in (select e.id from EncontroJpaEntity e where e.periodoId = :periodoId)
+			where n.encontroId in (select e.id from EncontroJpaEntity e where e.trimestreId = :trimestreId)
 			  and (:encontroId is null or n.encontroId = :encontroId)
 			  and (:criterioId is null or n.criterioId = :criterioId)
 			""")
-	List<NotaJpaEntity> findByPeriodoIdFiltered(
-			@Param("periodoId") Long periodoId,
+	List<NotaJpaEntity> findByTrimestreIdFiltered(
+			@Param("trimestreId") Long trimestreId,
 			@Param("encontroId") Long encontroId,
 			@Param("criterioId") Long criterioId);
 
 	@Query("""
 			select n from NotaJpaEntity n
 			where n.alunoId = :alunoId
-			  and n.encontroId in (select e.id from EncontroJpaEntity e where e.periodoId = :periodoId)
+			  and n.encontroId in (select e.id from EncontroJpaEntity e where e.trimestreId = :trimestreId)
 			""")
-	List<NotaJpaEntity> findByAlunoIdAndPeriodoId(@Param("alunoId") Long alunoId, @Param("periodoId") Long periodoId);
+	List<NotaJpaEntity> findByAlunoIdAndTrimestreId(@Param("alunoId") Long alunoId, @Param("trimestreId") Long trimestreId);
 
 	void deleteByAlunoId(Long alunoId);
 }

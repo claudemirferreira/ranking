@@ -2,13 +2,13 @@ package br.com.setebit.ranking.adapters.web;
 
 import br.com.setebit.ranking.adapters.web.dto.CreateEncontrosRequest;
 import br.com.setebit.ranking.adapters.web.dto.CriterioRequest;
-import br.com.setebit.ranking.adapters.web.dto.PeriodoRequest;
+import br.com.setebit.ranking.adapters.web.dto.TrimestreRequest;
 import br.com.setebit.ranking.application.dto.CriterioResponse;
 import br.com.setebit.ranking.application.dto.EncontroResponse;
 import br.com.setebit.ranking.application.dto.EvolucaoPontuacaoResponse;
 import br.com.setebit.ranking.application.dto.NotaResponse;
 import br.com.setebit.ranking.application.dto.PerdaPontuacaoResponse;
-import br.com.setebit.ranking.application.dto.PeriodoResponse;
+import br.com.setebit.ranking.application.dto.TrimestreResponse;
 import br.com.setebit.ranking.application.dto.RankingItemResponse;
 import br.com.setebit.ranking.application.port.in.ExportLancamentoPdfUseCase;
 import br.com.setebit.ranking.application.port.in.ExportRankingPdfUseCase;
@@ -16,7 +16,7 @@ import br.com.setebit.ranking.application.port.in.GetEvolucaoPontuacaoUseCase;
 import br.com.setebit.ranking.application.port.in.GetPerdaPontuacaoUseCase;
 import br.com.setebit.ranking.application.port.in.GetRankingUseCase;
 import br.com.setebit.ranking.application.port.in.ManageNotaUseCase;
-import br.com.setebit.ranking.application.port.in.ManagePeriodoUseCase;
+import br.com.setebit.ranking.application.port.in.ManageTrimestreUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -35,10 +35,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Tag(name = "Períodos")
-public class PeriodoController {
+@Tag(name = "Trimestres")
+public class TrimestreController {
 
-	private final ManagePeriodoUseCase managePeriodoUseCase;
+	private final ManageTrimestreUseCase manageTrimestreUseCase;
 	private final ManageNotaUseCase manageNotaUseCase;
 	private final GetRankingUseCase getRankingUseCase;
 	private final GetEvolucaoPontuacaoUseCase getEvolucaoPontuacaoUseCase;
@@ -46,15 +46,15 @@ public class PeriodoController {
 	private final ExportRankingPdfUseCase exportRankingPdfUseCase;
 	private final ExportLancamentoPdfUseCase exportLancamentoPdfUseCase;
 
-	public PeriodoController(
-			ManagePeriodoUseCase managePeriodoUseCase,
+	public TrimestreController(
+			ManageTrimestreUseCase manageTrimestreUseCase,
 			ManageNotaUseCase manageNotaUseCase,
 			GetRankingUseCase getRankingUseCase,
 			GetEvolucaoPontuacaoUseCase getEvolucaoPontuacaoUseCase,
 			GetPerdaPontuacaoUseCase getPerdaPontuacaoUseCase,
 			ExportRankingPdfUseCase exportRankingPdfUseCase,
 			ExportLancamentoPdfUseCase exportLancamentoPdfUseCase) {
-		this.managePeriodoUseCase = managePeriodoUseCase;
+		this.manageTrimestreUseCase = manageTrimestreUseCase;
 		this.manageNotaUseCase = manageNotaUseCase;
 		this.getRankingUseCase = getRankingUseCase;
 		this.getEvolucaoPontuacaoUseCase = getEvolucaoPontuacaoUseCase;
@@ -63,111 +63,111 @@ public class PeriodoController {
 		this.exportLancamentoPdfUseCase = exportLancamentoPdfUseCase;
 	}
 
-	@GetMapping("/api/turmas/{turmaId}/periodos")
-	@Operation(summary = "Listar períodos da turma")
-	public List<PeriodoResponse> listByTurma(@PathVariable Long turmaId) {
-		return managePeriodoUseCase.listByTurma(turmaId);
+	@GetMapping("/api/turmas/{turmaId}/trimestres")
+	@Operation(summary = "Listar trimestres da turma")
+	public List<TrimestreResponse> listByTurma(@PathVariable Long turmaId) {
+		return manageTrimestreUseCase.listByTurma(turmaId);
 	}
 
-	@PostMapping("/api/turmas/{turmaId}/periodos")
+	@PostMapping("/api/turmas/{turmaId}/trimestres")
 	@ResponseStatus(HttpStatus.CREATED)
-	@Operation(summary = "Criar período")
-	public PeriodoResponse create(@PathVariable Long turmaId, @Valid @RequestBody PeriodoRequest request) {
-		return managePeriodoUseCase.create(turmaId, request.nome(), request.dataInicio(), request.dataFim());
+	@Operation(summary = "Criar trimestre")
+	public TrimestreResponse create(@PathVariable Long turmaId, @Valid @RequestBody TrimestreRequest request) {
+		return manageTrimestreUseCase.create(turmaId, request.nome(), request.dataInicio(), request.dataFim());
 	}
 
-	@GetMapping("/api/periodos/{id}")
-	@Operation(summary = "Buscar período")
-	public PeriodoResponse get(@PathVariable Long id) {
-		return managePeriodoUseCase.getById(id);
+	@GetMapping("/api/trimestres/{id}")
+	@Operation(summary = "Buscar trimestre")
+	public TrimestreResponse get(@PathVariable Long id) {
+		return manageTrimestreUseCase.getById(id);
 	}
 
-	@PutMapping("/api/periodos/{id}")
-	@Operation(summary = "Atualizar período")
-	public PeriodoResponse update(@PathVariable Long id, @Valid @RequestBody PeriodoRequest request) {
-		return managePeriodoUseCase.update(id, request.nome(), request.dataInicio(), request.dataFim(), request.ativo());
+	@PutMapping("/api/trimestres/{id}")
+	@Operation(summary = "Atualizar trimestre")
+	public TrimestreResponse update(@PathVariable Long id, @Valid @RequestBody TrimestreRequest request) {
+		return manageTrimestreUseCase.update(id, request.nome(), request.dataInicio(), request.dataFim(), request.ativo());
 	}
 
-	@PostMapping("/api/periodos/{id}/encontros")
+	@PostMapping("/api/trimestres/{id}/encontros")
 	@ResponseStatus(HttpStatus.CREATED)
 	@Operation(summary = "Criar encontros (sábados) em lote")
 	public List<EncontroResponse> createEncontros(
 			@PathVariable Long id, @Valid @RequestBody CreateEncontrosRequest request) {
-		return managePeriodoUseCase.createEncontros(id, request.quantidade());
+		return manageTrimestreUseCase.createEncontros(id, request.quantidade());
 	}
 
-	@GetMapping("/api/periodos/{id}/encontros")
-	@Operation(summary = "Listar encontros do período")
+	@GetMapping("/api/trimestres/{id}/encontros")
+	@Operation(summary = "Listar encontros do trimestre")
 	public List<EncontroResponse> listEncontros(@PathVariable Long id) {
-		return managePeriodoUseCase.listEncontros(id);
+		return manageTrimestreUseCase.listEncontros(id);
 	}
 
-	@PostMapping("/api/periodos/{id}/criterios")
+	@PostMapping("/api/trimestres/{id}/criterios")
 	@ResponseStatus(HttpStatus.CREATED)
 	@Operation(summary = "Criar critério de pontuação")
 	public CriterioResponse createCriterio(@PathVariable Long id, @Valid @RequestBody CriterioRequest request) {
-		return managePeriodoUseCase.createCriterio(id, request.nome(), request.ordem(), request.pontuacaoMaxima());
+		return manageTrimestreUseCase.createCriterio(id, request.nome(), request.ordem(), request.pontuacaoMaxima());
 	}
 
-	@GetMapping("/api/periodos/{id}/criterios")
-	@Operation(summary = "Listar critérios do período")
+	@GetMapping("/api/trimestres/{id}/criterios")
+	@Operation(summary = "Listar critérios do trimestre")
 	public List<CriterioResponse> listCriterios(@PathVariable Long id) {
-		return managePeriodoUseCase.listCriterios(id);
+		return manageTrimestreUseCase.listCriterios(id);
 	}
 
 	@PutMapping("/api/criterios/{id}")
 	@Operation(summary = "Atualizar critério")
 	public CriterioResponse updateCriterio(@PathVariable Long id, @Valid @RequestBody CriterioRequest request) {
-		return managePeriodoUseCase.updateCriterio(id, request.nome(), request.ordem(), request.pontuacaoMaxima());
+		return manageTrimestreUseCase.updateCriterio(id, request.nome(), request.ordem(), request.pontuacaoMaxima());
 	}
 
-	@GetMapping("/api/periodos/{periodoId}/notas")
-	@Operation(summary = "Listar notas do período (filtros opcionais)")
+	@GetMapping("/api/trimestres/{trimestreId}/notas")
+	@Operation(summary = "Listar notas do trimestre (filtros opcionais)")
 	public List<NotaResponse> listNotas(
-			@PathVariable Long periodoId,
+			@PathVariable Long trimestreId,
 			@RequestParam(required = false) Long encontroId,
 			@RequestParam(required = false) Long criterioId) {
-		return manageNotaUseCase.listByPeriodo(periodoId, encontroId, criterioId);
+		return manageNotaUseCase.listByTrimestre(trimestreId, encontroId, criterioId);
 	}
 
-	@GetMapping("/api/periodos/{periodoId}/evolucao")
+	@GetMapping("/api/trimestres/{trimestreId}/evolucao")
 	@Operation(summary = "Evolução da pontuação dos alunos por sábado")
-	public EvolucaoPontuacaoResponse evolucao(@PathVariable Long periodoId) {
-		return getEvolucaoPontuacaoUseCase.execute(periodoId);
+	public EvolucaoPontuacaoResponse evolucao(@PathVariable Long trimestreId) {
+		return getEvolucaoPontuacaoUseCase.execute(trimestreId);
 	}
 
-	@GetMapping("/api/periodos/{periodoId}/perdas")
-	@Operation(summary = "Onde os alunos perdem mais pontos no período")
-	public PerdaPontuacaoResponse perdas(@PathVariable Long periodoId) {
-		return getPerdaPontuacaoUseCase.execute(periodoId);
+	@GetMapping("/api/trimestres/{trimestreId}/perdas")
+	@Operation(summary = "Onde os alunos perdem mais pontos no trimestre")
+	public PerdaPontuacaoResponse perdas(@PathVariable Long trimestreId) {
+		return getPerdaPontuacaoUseCase.execute(trimestreId);
 	}
 
-	@GetMapping("/api/periodos/{periodoId}/ranking")
-	@Operation(summary = "Ranking do período (apenas alunos ativos)")
-	public List<RankingItemResponse> ranking(@PathVariable Long periodoId) {
-		return getRankingUseCase.execute(periodoId);
+	@GetMapping("/api/trimestres/{trimestreId}/ranking")
+	@Operation(summary = "Ranking do trimestre (apenas alunos ativos)")
+	public List<RankingItemResponse> ranking(@PathVariable Long trimestreId) {
+		return getRankingUseCase.execute(trimestreId);
 	}
 
-	@GetMapping("/api/periodos/{periodoId}/ranking/pdf")
+	@GetMapping("/api/trimestres/{trimestreId}/ranking/pdf")
 	@Operation(summary = "Exportar ranking em PDF (nome, total e critério)")
-	public ResponseEntity<byte[]> rankingPdf(@PathVariable Long periodoId) {
-		byte[] pdf = exportRankingPdfUseCase.execute(periodoId);
+	public ResponseEntity<byte[]> rankingPdf(@PathVariable Long trimestreId) {
+		byte[] pdf = exportRankingPdfUseCase.execute(trimestreId);
 		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"ranking-periodo-" + periodoId + ".pdf\"")
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"ranking-trimestre-" + trimestreId + ".pdf\"")
 				.contentType(MediaType.APPLICATION_PDF)
 				.body(pdf);
 	}
 
-	@GetMapping("/api/periodos/{periodoId}/encontros/{encontroId}/lancamento/pdf")
+	@GetMapping("/api/trimestres/{trimestreId}/encontros/{encontroId}/lancamento/pdf")
 	@Operation(summary = "Imprimir lançamento do encontro em PDF (ordenado por total decrescente)")
 	public ResponseEntity<byte[]> lancamentoPdf(
-			@PathVariable Long periodoId,
+			@PathVariable Long trimestreId,
 			@PathVariable Long encontroId) {
-		byte[] pdf = exportLancamentoPdfUseCase.execute(periodoId, encontroId);
+		byte[] pdf = exportLancamentoPdfUseCase.execute(trimestreId, encontroId);
 		return ResponseEntity.ok()
 				.header(
 						HttpHeaders.CONTENT_DISPOSITION,
-						"attachment; filename=\"lancamento-periodo-" + periodoId + "-encontro-" + encontroId + ".pdf\"")
+						"attachment; filename=\"lancamento-trimestre-" + trimestreId + "-encontro-" + encontroId + ".pdf\"")
 				.contentType(MediaType.APPLICATION_PDF)
 				.body(pdf);
 	}

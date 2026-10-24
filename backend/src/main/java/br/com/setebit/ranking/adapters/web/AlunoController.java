@@ -80,8 +80,8 @@ public class AlunoController {
 	}
 
 	@GetMapping("/api/alunos/{alunoId}/historico")
-	@Operation(summary = "Histórico de notas do aluno no período")
-	public HistoricoAlunoResponse historico(@PathVariable Long alunoId, @RequestParam Long periodoId) {
-		return manageNotaUseCase.historico(alunoId, periodoId);
+	@Operation(summary = "Histórico de notas do aluno no trimestre")
+	public HistoricoAlunoResponse historico(@PathVariable Long alunoId, @RequestParam Long trimestreId) {
+		return manageNotaUseCase.historico(alunoId, trimestreId);
 	}
 }

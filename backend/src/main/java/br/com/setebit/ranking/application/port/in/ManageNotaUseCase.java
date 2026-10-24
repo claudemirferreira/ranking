@@ -11,9 +11,9 @@ public interface ManageNotaUseCase {
 
 	List<NotaResponse> upsertLote(List<NotaItem> itens);
 
-	List<NotaResponse> listByPeriodo(Long periodoId, Long encontroId, Long criterioId);
+	List<NotaResponse> listByTrimestre(Long trimestreId, Long encontroId, Long criterioId);
 
-	HistoricoAlunoResponse historico(Long alunoId, Long periodoId);
+	HistoricoAlunoResponse historico(Long alunoId, Long trimestreId);
 
 	record NotaItem(Long alunoId, Long encontroId, Long criterioId, BigDecimal valor, String observacao) {
 	}

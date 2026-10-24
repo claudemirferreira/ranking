@@ -12,7 +12,7 @@ public interface EncontroRepositoryPort {
 
 	Optional<Encontro> findById(Long id);
 
-	List<Encontro> findByPeriodoId(Long periodoId);
+	List<Encontro> findByTrimestreId(Long trimestreId);
 
-	int countByPeriodoId(Long periodoId);
+	int countByTrimestreId(Long trimestreId);
 }

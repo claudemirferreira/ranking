@@ -5,7 +5,7 @@ import java.time.LocalDate;
 public class Encontro {
 
 	private Long id;
-	private Long periodoId;
+	private Long trimestreId;
 	private int numero;
 	private LocalDate data;
 	private String titulo;
@@ -18,12 +18,12 @@ public class Encontro {
 		this.id = id;
 	}
 
-	public Long getPeriodoId() {
-		return periodoId;
+	public Long getTrimestreId() {
+		return trimestreId;
 	}
 
-	public void setPeriodoId(Long periodoId) {
-		this.periodoId = periodoId;
+	public void setTrimestreId(Long trimestreId) {
+		this.trimestreId = trimestreId;
 	}
 
 	public int getNumero() {

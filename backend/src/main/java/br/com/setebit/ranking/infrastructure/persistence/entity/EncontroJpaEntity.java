@@ -10,15 +10,17 @@ import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "encontros", uniqueConstraints = @UniqueConstraint(columnNames = {"periodoId", "numero"}))
+@Table(
+		name = "encontros",
+		uniqueConstraints = @UniqueConstraint(name = "uk_trimestre_numero", columnNames = {"trimestre_id", "numero"}))
 public class EncontroJpaEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private Long periodoId;
+	@Column(name = "trimestre_id", nullable = false)
+	private Long trimestreId;
 
 	@Column(nullable = false)
 	private int numero;
@@ -36,12 +38,12 @@ public class EncontroJpaEntity {
 		this.id = id;
 	}
 
-	public Long getPeriodoId() {
-		return periodoId;
+	public Long getTrimestreId() {
+		return trimestreId;
 	}
 
-	public void setPeriodoId(Long periodoId) {
-		this.periodoId = periodoId;
+	public void setTrimestreId(Long trimestreId) {
+		this.trimestreId = trimestreId;
 	}
 
 	public int getNumero() {

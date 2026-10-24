@@ -28,7 +28,7 @@ public class CriterioRepositoryAdapter implements CriterioRepositoryPort {
 	}
 
 	@Override
-	public List<Criterio> findByPeriodoId(Long periodoId) {
-		return repository.findByPeriodoIdOrderByOrdemAsc(periodoId).stream().map(JpaMapper::toDomain).toList();
+	public List<Criterio> findByTrimestreId(Long trimestreId) {
+		return repository.findByTrimestreIdOrderByOrdemAsc(trimestreId).stream().map(JpaMapper::toDomain).toList();
 	}
 }

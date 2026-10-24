@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public record EncontroResponse(
 		Long id,
-		Long periodoId,
+		Long trimestreId,
 		int numero,
 		LocalDate data,
 		String titulo

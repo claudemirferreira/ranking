@@ -4,13 +4,13 @@ import br.com.setebit.ranking.domain.model.Aluno;
 import br.com.setebit.ranking.domain.model.Criterio;
 import br.com.setebit.ranking.domain.model.Encontro;
 import br.com.setebit.ranking.domain.model.Nota;
-import br.com.setebit.ranking.domain.model.Periodo;
+import br.com.setebit.ranking.domain.model.Trimestre;
 import br.com.setebit.ranking.domain.model.Turma;
 import br.com.setebit.ranking.infrastructure.persistence.entity.AlunoJpaEntity;
 import br.com.setebit.ranking.infrastructure.persistence.entity.CriterioJpaEntity;
 import br.com.setebit.ranking.infrastructure.persistence.entity.EncontroJpaEntity;
 import br.com.setebit.ranking.infrastructure.persistence.entity.NotaJpaEntity;
-import br.com.setebit.ranking.infrastructure.persistence.entity.PeriodoJpaEntity;
+import br.com.setebit.ranking.infrastructure.persistence.entity.TrimestreJpaEntity;
 import br.com.setebit.ranking.infrastructure.persistence.entity.TurmaJpaEntity;
 
 public final class JpaMapper {
@@ -68,21 +68,21 @@ public final class JpaMapper {
 		return entity;
 	}
 
-	public static Periodo toDomain(PeriodoJpaEntity entity) {
-		Periodo periodo = new Periodo();
-		periodo.setId(entity.getId());
-		periodo.setTurmaId(entity.getTurmaId());
-		periodo.setNome(entity.getNome());
-		periodo.setDataInicio(entity.getDataInicio());
-		periodo.setDataFim(entity.getDataFim());
-		periodo.setAtivo(entity.isAtivo());
-		periodo.setCreatedAt(entity.getCreatedAt());
-		periodo.setUpdatedAt(entity.getUpdatedAt());
-		return periodo;
+	public static Trimestre toDomain(TrimestreJpaEntity entity) {
+		Trimestre trimestre = new Trimestre();
+		trimestre.setId(entity.getId());
+		trimestre.setTurmaId(entity.getTurmaId());
+		trimestre.setNome(entity.getNome());
+		trimestre.setDataInicio(entity.getDataInicio());
+		trimestre.setDataFim(entity.getDataFim());
+		trimestre.setAtivo(entity.isAtivo());
+		trimestre.setCreatedAt(entity.getCreatedAt());
+		trimestre.setUpdatedAt(entity.getUpdatedAt());
+		return trimestre;
 	}
 
-	public static PeriodoJpaEntity toEntity(Periodo domain) {
-		PeriodoJpaEntity entity = new PeriodoJpaEntity();
+	public static TrimestreJpaEntity toEntity(Trimestre domain) {
+		TrimestreJpaEntity entity = new TrimestreJpaEntity();
 		entity.setId(domain.getId());
 		entity.setTurmaId(domain.getTurmaId());
 		entity.setNome(domain.getNome());
@@ -97,7 +97,7 @@ public final class JpaMapper {
 	public static Encontro toDomain(EncontroJpaEntity entity) {
 		Encontro encontro = new Encontro();
 		encontro.setId(entity.getId());
-		encontro.setPeriodoId(entity.getPeriodoId());
+		encontro.setTrimestreId(entity.getTrimestreId());
 		encontro.setNumero(entity.getNumero());
 		encontro.setData(entity.getData());
 		encontro.setTitulo(entity.getTitulo());
@@ -107,7 +107,7 @@ public final class JpaMapper {
 	public static EncontroJpaEntity toEntity(Encontro domain) {
 		EncontroJpaEntity entity = new EncontroJpaEntity();
 		entity.setId(domain.getId());
-		entity.setPeriodoId(domain.getPeriodoId());
+		entity.setTrimestreId(domain.getTrimestreId());
 		entity.setNumero(domain.getNumero());
 		entity.setData(domain.getData());
 		entity.setTitulo(domain.getTitulo());
@@ -117,7 +117,7 @@ public final class JpaMapper {
 	public static Criterio toDomain(CriterioJpaEntity entity) {
 		Criterio criterio = new Criterio();
 		criterio.setId(entity.getId());
-		criterio.setPeriodoId(entity.getPeriodoId());
+		criterio.setTrimestreId(entity.getTrimestreId());
 		criterio.setNome(entity.getNome());
 		criterio.setOrdem(entity.getOrdem());
 		criterio.setPontuacaoMaxima(entity.getPontuacaoMaxima());
@@ -127,7 +127,7 @@ public final class JpaMapper {
 	public static CriterioJpaEntity toEntity(Criterio domain) {
 		CriterioJpaEntity entity = new CriterioJpaEntity();
 		entity.setId(domain.getId());
-		entity.setPeriodoId(domain.getPeriodoId());
+		entity.setTrimestreId(domain.getTrimestreId());
 		entity.setNome(domain.getNome());
 		entity.setOrdem(domain.getOrdem());
 		entity.setPontuacaoMaxima(domain.getPontuacaoMaxima());

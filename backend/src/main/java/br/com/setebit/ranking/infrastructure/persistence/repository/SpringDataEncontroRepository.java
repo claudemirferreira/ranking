@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SpringDataEncontroRepository extends JpaRepository<EncontroJpaEntity, Long> {
 
-	List<EncontroJpaEntity> findByPeriodoIdOrderByNumeroAsc(Long periodoId);
+	List<EncontroJpaEntity> findByTrimestreIdOrderByNumeroAsc(Long trimestreId);
 
-	int countByPeriodoId(Long periodoId);
+	int countByTrimestreId(Long trimestreId);
 }

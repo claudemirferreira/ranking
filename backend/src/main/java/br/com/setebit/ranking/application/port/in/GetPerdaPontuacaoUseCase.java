@@ -4,5 +4,5 @@ import br.com.setebit.ranking.application.dto.PerdaPontuacaoResponse;
 
 public interface GetPerdaPontuacaoUseCase {
 
-	PerdaPontuacaoResponse execute(Long periodoId);
+	PerdaPontuacaoResponse execute(Long trimestreId);
 }

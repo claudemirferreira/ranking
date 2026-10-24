@@ -10,5 +10,5 @@ public interface CriterioRepositoryPort {
 
 	Optional<Criterio> findById(Long id);
 
-	List<Criterio> findByPeriodoId(Long periodoId);
+	List<Criterio> findByTrimestreId(Long trimestreId);
 }

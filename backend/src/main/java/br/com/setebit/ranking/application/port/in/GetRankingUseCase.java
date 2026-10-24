@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface GetRankingUseCase {
 
-	List<RankingItemResponse> execute(Long periodoId);
+	List<RankingItemResponse> execute(Long trimestreId);
 }

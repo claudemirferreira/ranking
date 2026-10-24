@@ -1,10 +1,10 @@
 package br.com.setebit.ranking.application.usecase;
 
 import br.com.setebit.ranking.application.dto.LancamentoPdfRow;
-import br.com.setebit.ranking.application.dto.PeriodoResponse;
+import br.com.setebit.ranking.application.dto.TrimestreResponse;
 import br.com.setebit.ranking.application.dto.TurmaResponse;
 import br.com.setebit.ranking.application.port.in.ExportLancamentoPdfUseCase;
-import br.com.setebit.ranking.application.port.in.ManagePeriodoUseCase;
+import br.com.setebit.ranking.application.port.in.ManageTrimestreUseCase;
 import br.com.setebit.ranking.application.port.in.ManageTurmaUseCase;
 import br.com.setebit.ranking.application.port.out.AlunoRepositoryPort;
 import br.com.setebit.ranking.application.port.out.CriterioRepositoryPort;
@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ExportLancamentoPdfUseCaseImpl implements ExportLancamentoPdfUseCase {
 
-	private final ManagePeriodoUseCase managePeriodoUseCase;
+	private final ManageTrimestreUseCase manageTrimestreUseCase;
 	private final ManageTurmaUseCase manageTurmaUseCase;
 	private final EncontroRepositoryPort encontroRepository;
 	private final AlunoRepositoryPort alunoRepository;
@@ -39,14 +39,14 @@ public class ExportLancamentoPdfUseCaseImpl implements ExportLancamentoPdfUseCas
 	private final RankingCalculator rankingCalculator = new RankingCalculator();
 
 	public ExportLancamentoPdfUseCaseImpl(
-			ManagePeriodoUseCase managePeriodoUseCase,
+			ManageTrimestreUseCase manageTrimestreUseCase,
 			ManageTurmaUseCase manageTurmaUseCase,
 			EncontroRepositoryPort encontroRepository,
 			AlunoRepositoryPort alunoRepository,
 			NotaRepositoryPort notaRepository,
 			CriterioRepositoryPort criterioRepository,
 			LancamentoPdfReportPort lancamentoPdfReportPort) {
-		this.managePeriodoUseCase = managePeriodoUseCase;
+		this.manageTrimestreUseCase = manageTrimestreUseCase;
 		this.manageTurmaUseCase = manageTurmaUseCase;
 		this.encontroRepository = encontroRepository;
 		this.alunoRepository = alunoRepository;
@@ -56,19 +56,19 @@ public class ExportLancamentoPdfUseCaseImpl implements ExportLancamentoPdfUseCas
 	}
 
 	@Override
-	public byte[] execute(Long periodoId, Long encontroId) {
-		PeriodoResponse periodo = managePeriodoUseCase.getById(periodoId);
-		TurmaResponse turma = manageTurmaUseCase.getById(periodo.turmaId());
+	public byte[] execute(Long trimestreId, Long encontroId) {
+		TrimestreResponse trimestre = manageTrimestreUseCase.getById(trimestreId);
+		TurmaResponse turma = manageTurmaUseCase.getById(trimestre.turmaId());
 
 		Encontro encontro = encontroRepository.findById(encontroId)
 				.orElseThrow(() -> new ResourceNotFoundException("Encontro não encontrado: " + encontroId));
-		if (!encontro.getPeriodoId().equals(periodoId)) {
-			throw new BusinessRuleException("Encontro não pertence ao período informado");
+		if (!encontro.getTrimestreId().equals(trimestreId)) {
+			throw new BusinessRuleException("Encontro não pertence ao trimestre informado");
 		}
 
-		List<Aluno> alunosAtivos = alunoRepository.findActiveByTurmaId(periodo.turmaId());
-		List<Criterio> criterios = criterioRepository.findByPeriodoId(periodoId);
-		List<Nota> notasDoEncontro = notaRepository.findByPeriodoIdFiltered(periodoId, encontroId, null);
+		List<Aluno> alunosAtivos = alunoRepository.findActiveByTurmaId(trimestre.turmaId());
+		List<Criterio> criterios = criterioRepository.findByTrimestreId(trimestreId);
+		List<Nota> notasDoEncontro = notaRepository.findByTrimestreIdFiltered(trimestreId, encontroId, null);
 
 		List<RankingCalculator.RankingEntry> ranking =
 				rankingCalculator.calculate(alunosAtivos, notasDoEncontro, criterios);
@@ -87,7 +87,7 @@ public class ExportLancamentoPdfUseCaseImpl implements ExportLancamentoPdfUseCas
 
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("TITULO", "Lançamento — " + encontroTitulo);
-		parameters.put("PERIODO", periodo.nome());
+		parameters.put("TRIMESTRE", trimestre.nome());
 		parameters.put("TURMA", turma.nome());
 		parameters.put("ENCONTRO", encontroTitulo);
 

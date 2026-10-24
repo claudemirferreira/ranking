@@ -2,18 +2,18 @@ package br.com.setebit.ranking.application.usecase;
 
 import br.com.setebit.ranking.application.dto.CriterioResponse;
 import br.com.setebit.ranking.application.dto.EncontroResponse;
-import br.com.setebit.ranking.application.dto.PeriodoResponse;
+import br.com.setebit.ranking.application.dto.TrimestreResponse;
 import br.com.setebit.ranking.application.mapper.ApplicationMapper;
-import br.com.setebit.ranking.application.port.in.ManagePeriodoUseCase;
+import br.com.setebit.ranking.application.port.in.ManageTrimestreUseCase;
 import br.com.setebit.ranking.application.port.out.CriterioRepositoryPort;
 import br.com.setebit.ranking.application.port.out.EncontroRepositoryPort;
-import br.com.setebit.ranking.application.port.out.PeriodoRepositoryPort;
+import br.com.setebit.ranking.application.port.out.TrimestreRepositoryPort;
 import br.com.setebit.ranking.application.port.out.TurmaRepositoryPort;
 import br.com.setebit.ranking.domain.exception.BusinessRuleException;
 import br.com.setebit.ranking.domain.exception.ResourceNotFoundException;
 import br.com.setebit.ranking.domain.model.Criterio;
 import br.com.setebit.ranking.domain.model.Encontro;
-import br.com.setebit.ranking.domain.model.Periodo;
+import br.com.setebit.ranking.domain.model.Trimestre;
 import br.com.setebit.ranking.domain.model.Turma;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -25,77 +25,77 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class ManagePeriodoUseCaseImpl implements ManagePeriodoUseCase {
+public class ManageTrimestreUseCaseImpl implements ManageTrimestreUseCase {
 
-	private final PeriodoRepositoryPort periodoRepository;
+	private final TrimestreRepositoryPort trimestreRepository;
 	private final TurmaRepositoryPort turmaRepository;
 	private final EncontroRepositoryPort encontroRepository;
 	private final CriterioRepositoryPort criterioRepository;
 
-	public ManagePeriodoUseCaseImpl(
-			PeriodoRepositoryPort periodoRepository,
+	public ManageTrimestreUseCaseImpl(
+			TrimestreRepositoryPort trimestreRepository,
 			TurmaRepositoryPort turmaRepository,
 			EncontroRepositoryPort encontroRepository,
 			CriterioRepositoryPort criterioRepository) {
-		this.periodoRepository = periodoRepository;
+		this.trimestreRepository = trimestreRepository;
 		this.turmaRepository = turmaRepository;
 		this.encontroRepository = encontroRepository;
 		this.criterioRepository = criterioRepository;
 	}
 
 	@Override
-	public PeriodoResponse create(Long turmaId, String nome, LocalDate dataInicio, LocalDate dataFim) {
+	public TrimestreResponse create(Long turmaId, String nome, LocalDate dataInicio, LocalDate dataFim) {
 		requireTurma(turmaId);
 		Instant now = Instant.now();
-		Periodo periodo = new Periodo();
-		periodo.setTurmaId(turmaId);
-		periodo.setNome(nome.trim());
-		periodo.setDataInicio(dataInicio);
-		periodo.setDataFim(dataFim);
-		periodo.setAtivo(true);
-		periodo.setCreatedAt(now);
-		periodo.setUpdatedAt(now);
-		return ApplicationMapper.toResponse(periodoRepository.save(periodo));
+		Trimestre trimestre = new Trimestre();
+		trimestre.setTurmaId(turmaId);
+		trimestre.setNome(nome.trim());
+		trimestre.setDataInicio(dataInicio);
+		trimestre.setDataFim(dataFim);
+		trimestre.setAtivo(true);
+		trimestre.setCreatedAt(now);
+		trimestre.setUpdatedAt(now);
+		return ApplicationMapper.toResponse(trimestreRepository.save(trimestre));
 	}
 
 	@Override
-	public PeriodoResponse update(Long id, String nome, LocalDate dataInicio, LocalDate dataFim, Boolean ativo) {
-		Periodo periodo = requirePeriodo(id);
-		periodo.setNome(nome.trim());
-		periodo.setDataInicio(dataInicio);
-		periodo.setDataFim(dataFim);
+	public TrimestreResponse update(Long id, String nome, LocalDate dataInicio, LocalDate dataFim, Boolean ativo) {
+		Trimestre trimestre = requireTrimestre(id);
+		trimestre.setNome(nome.trim());
+		trimestre.setDataInicio(dataInicio);
+		trimestre.setDataFim(dataFim);
 		if (ativo != null) {
-			periodo.setAtivo(ativo);
+			trimestre.setAtivo(ativo);
 		}
-		periodo.setUpdatedAt(Instant.now());
-		return ApplicationMapper.toResponse(periodoRepository.save(periodo));
+		trimestre.setUpdatedAt(Instant.now());
+		return ApplicationMapper.toResponse(trimestreRepository.save(trimestre));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public PeriodoResponse getById(Long id) {
-		return ApplicationMapper.toResponse(requirePeriodo(id));
+	public TrimestreResponse getById(Long id) {
+		return ApplicationMapper.toResponse(requireTrimestre(id));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<PeriodoResponse> listByTurma(Long turmaId) {
+	public List<TrimestreResponse> listByTurma(Long turmaId) {
 		requireTurma(turmaId);
-		return periodoRepository.findByTurmaId(turmaId).stream().map(ApplicationMapper::toResponse).toList();
+		return trimestreRepository.findByTurmaId(turmaId).stream().map(ApplicationMapper::toResponse).toList();
 	}
 
 	@Override
-	public List<EncontroResponse> createEncontros(Long periodoId, int quantidade) {
+	public List<EncontroResponse> createEncontros(Long trimestreId, int quantidade) {
 		if (quantidade < 1) {
 			throw new BusinessRuleException("Quantidade de encontros deve ser pelo menos 1");
 		}
-		requirePeriodo(periodoId);
-		int existentes = encontroRepository.countByPeriodoId(periodoId);
+		requireTrimestre(trimestreId);
+		int existentes = encontroRepository.countByTrimestreId(trimestreId);
 		List<Encontro> novos = new ArrayList<>();
 		for (int i = 1; i <= quantidade; i++) {
 			int numero = existentes + i;
 			Encontro encontro = new Encontro();
-			encontro.setPeriodoId(periodoId);
+			encontro.setTrimestreId(trimestreId);
 			encontro.setNumero(numero);
 			encontro.setTitulo("Sábado " + numero);
 			novos.add(encontro);
@@ -105,18 +105,18 @@ public class ManagePeriodoUseCaseImpl implements ManagePeriodoUseCase {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<EncontroResponse> listEncontros(Long periodoId) {
-		requirePeriodo(periodoId);
-		return encontroRepository.findByPeriodoId(periodoId).stream().map(ApplicationMapper::toResponse).toList();
+	public List<EncontroResponse> listEncontros(Long trimestreId) {
+		requireTrimestre(trimestreId);
+		return encontroRepository.findByTrimestreId(trimestreId).stream().map(ApplicationMapper::toResponse).toList();
 	}
 
 	@Override
-	public CriterioResponse createCriterio(Long periodoId, String nome, Integer ordem, BigDecimal pontuacaoMaxima) {
-		requirePeriodo(periodoId);
+	public CriterioResponse createCriterio(Long trimestreId, String nome, Integer ordem, BigDecimal pontuacaoMaxima) {
+		requireTrimestre(trimestreId);
 		Criterio criterio = new Criterio();
-		criterio.setPeriodoId(periodoId);
+		criterio.setTrimestreId(trimestreId);
 		criterio.setNome(nome.trim());
-		criterio.setOrdem(ordem != null ? ordem : criterioRepository.findByPeriodoId(periodoId).size() + 1);
+		criterio.setOrdem(ordem != null ? ordem : criterioRepository.findByTrimestreId(trimestreId).size() + 1);
 		criterio.setPontuacaoMaxima(pontuacaoMaxima != null ? pontuacaoMaxima : BigDecimal.TEN);
 		return ApplicationMapper.toResponse(criterioRepository.save(criterio));
 	}
@@ -137,9 +137,9 @@ public class ManagePeriodoUseCaseImpl implements ManagePeriodoUseCase {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<CriterioResponse> listCriterios(Long periodoId) {
-		requirePeriodo(periodoId);
-		return criterioRepository.findByPeriodoId(periodoId).stream().map(ApplicationMapper::toResponse).toList();
+	public List<CriterioResponse> listCriterios(Long trimestreId) {
+		requireTrimestre(trimestreId);
+		return criterioRepository.findByTrimestreId(trimestreId).stream().map(ApplicationMapper::toResponse).toList();
 	}
 
 	private void requireTurma(Long turmaId) {
@@ -148,8 +148,8 @@ public class ManagePeriodoUseCaseImpl implements ManagePeriodoUseCase {
 				.orElseThrow(() -> new ResourceNotFoundException("Turma não encontrada: " + turmaId));
 	}
 
-	private Periodo requirePeriodo(Long id) {
-		return periodoRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Período não encontrado: " + id));
+	private Trimestre requireTrimestre(Long id) {
+		return trimestreRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Trimestre não encontrado: " + id));
 	}
 }

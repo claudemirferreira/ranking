@@ -1,12 +1,12 @@
 package br.com.setebit.ranking.application.usecase;
 
-import br.com.setebit.ranking.application.dto.PeriodoResponse;
+import br.com.setebit.ranking.application.dto.TrimestreResponse;
 import br.com.setebit.ranking.application.dto.RankingItemResponse;
 import br.com.setebit.ranking.application.dto.RankingPdfRow;
 import br.com.setebit.ranking.application.dto.TurmaResponse;
 import br.com.setebit.ranking.application.port.in.ExportRankingPdfUseCase;
 import br.com.setebit.ranking.application.port.in.GetRankingUseCase;
-import br.com.setebit.ranking.application.port.in.ManagePeriodoUseCase;
+import br.com.setebit.ranking.application.port.in.ManageTrimestreUseCase;
 import br.com.setebit.ranking.application.port.in.ManageTurmaUseCase;
 import br.com.setebit.ranking.application.port.out.RankingPdfReportPort;
 import java.util.HashMap;
@@ -21,26 +21,26 @@ import org.springframework.transaction.annotation.Transactional;
 public class ExportRankingPdfUseCaseImpl implements ExportRankingPdfUseCase {
 
 	private final GetRankingUseCase getRankingUseCase;
-	private final ManagePeriodoUseCase managePeriodoUseCase;
+	private final ManageTrimestreUseCase manageTrimestreUseCase;
 	private final ManageTurmaUseCase manageTurmaUseCase;
 	private final RankingPdfReportPort rankingPdfReportPort;
 
 	public ExportRankingPdfUseCaseImpl(
 			GetRankingUseCase getRankingUseCase,
-			ManagePeriodoUseCase managePeriodoUseCase,
+			ManageTrimestreUseCase manageTrimestreUseCase,
 			ManageTurmaUseCase manageTurmaUseCase,
 			RankingPdfReportPort rankingPdfReportPort) {
 		this.getRankingUseCase = getRankingUseCase;
-		this.managePeriodoUseCase = managePeriodoUseCase;
+		this.manageTrimestreUseCase = manageTrimestreUseCase;
 		this.manageTurmaUseCase = manageTurmaUseCase;
 		this.rankingPdfReportPort = rankingPdfReportPort;
 	}
 
 	@Override
-	public byte[] execute(Long periodoId) {
-		PeriodoResponse periodo = managePeriodoUseCase.getById(periodoId);
-		TurmaResponse turma = manageTurmaUseCase.getById(periodo.turmaId());
-		List<RankingItemResponse> ranking = getRankingUseCase.execute(periodoId);
+	public byte[] execute(Long trimestreId) {
+		TrimestreResponse trimestre = manageTrimestreUseCase.getById(trimestreId);
+		TurmaResponse turma = manageTurmaUseCase.getById(trimestre.turmaId());
+		List<RankingItemResponse> ranking = getRankingUseCase.execute(trimestreId);
 
 		List<RankingPdfRow> rows = ranking.stream()
 				.map(item -> new RankingPdfRow(
@@ -50,8 +50,8 @@ public class ExportRankingPdfUseCaseImpl implements ExportRankingPdfUseCase {
 				.toList();
 
 		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("TITULO", "Ranking — " + periodo.nome());
-		parameters.put("PERIODO", periodo.nome());
+		parameters.put("TITULO", "Ranking — " + trimestre.nome());
+		parameters.put("TRIMESTRE", trimestre.nome());
 		parameters.put("TURMA", turma.nome());
 
 		return rankingPdfReportPort.generate(parameters, rows);

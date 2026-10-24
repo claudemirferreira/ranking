@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public record CriterioResponse(
 		Long id,
-		Long periodoId,
+		Long trimestreId,
 		String nome,
 		int ordem,
 		BigDecimal pontuacaoMaxima
