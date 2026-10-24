@@ -3,11 +3,13 @@
 ## Contexto
 Backend Spring Boot para controlar as notas/pontuações dos alunos que frequentam a salinha da Igreja Adventista todos os sábados.
 
-Referência de domínio: planilha "Tabela de Pontuação – Classe dos Juvenis", com alunos em linhas e sábados (1–13) em colunas, pontos por encontro e total/ranking.
+Referência de domínio: planilha "Tabela de Pontuação – Classe dos Juvenis", com alunos em linhas e sábados (1–13) em colunas, pontos por sábado e total/ranking.
 
 Como funciona cada trimestre da Escola Sabatina (13 sábados, lição, 13º sábado e cartão de pontos): `doc/PROMPT_ESCOLA_SABATINA.md`.
 
 O tipo no código é trimestre (antes chamado de período). Tarefas dessa troca: `doc/PROMPT_REFACTOR_TRIMESTRE.md`.
+
+O sábado no código é `Sabado` (antes chamado de encontro). Tarefas dessa troca: `doc/PROMPT_REFACTOR_SABADO.md`.
 
 Projeto atual:
 - Path: `c:\work\setebit\ranking\backend`
@@ -26,17 +28,17 @@ Projeto atual:
 ## Objetivo do produto
 Permitir que professores/dirigentes:
 1. Cadastrem turmas e alunos
-2. Cadastrem encontros (sábados) de um trimestre
+2. Cadastrem sábados de um trimestre
 3. Definam critérios de pontuação (ex.: presença, lição, comportamento — a planilha tem 3 blocos de sábados)
-4. Lancem notas por aluno/encontro/critério de forma rápida
+4. Lancem notas por aluno/sábado/critério de forma rápida
 5. Consultem ranking e total por aluno automaticamente
 6. Consultem histórico de um aluno
 
 ## Regras de negócio
 - Uma **Turma** (ex.: Juvenis) possui vários **Alunos**.
-- Um **Trimestre** (ex.: "Lição 4") pertence a uma turma e contém vários **Encontros** (Sábado 1…N) com data opcional.
+- Um **Trimestre** (ex.: "Lição 4") pertence a uma turma e contém vários **Sábados** (Sábado 1…N) com data opcional.
 - Cada trimestre tem um ou mais **Critérios** de pontuação (nome + ordem + pontuação máxima padrão, ex.: 10).
-- Uma **Nota** é única por combinação (aluno + encontro + critério).
+- Uma **Nota** é única por combinação (aluno + sábado + critério).
 - Valor da nota: numérico decimal; na prática costuma ser 0 ou 10, mas aceitar 0 até o máximo do critério.
 - **Total do aluno no trimestre** = soma de todas as notas do aluno naquele trimestre.
 - **Ranking** = ordenação dos alunos ativos da turma/trimestre por total decrescente; em empate, ordenar por nome.
@@ -47,15 +49,15 @@ Permitir que professores/dirigentes:
 - `Turma`: id, nome, descricao, ativo, excluidoEm, createdAt, updatedAt
 - `Aluno`: id, turmaId, numero (opcional), nome, ativo, createdAt, updatedAt
 - `Trimestre`: id, turmaId, nome (ex.: "Lição 3"), dataInicio, dataFim, ativo
-- `Encontro`: id, trimestreId, numero (1..N), data (opcional), titulo (ex.: "Sábado 5")
+- `Sabado`: id, trimestreId, numero (1..N), data (opcional), titulo (ex.: "Sábado 5")
 - `Criterio`: id, trimestreId, nome, ordem, pontuacaoMaxima (default 10)
-- `Nota`: id, alunoId, encontroId, criterioId, valor, observacao (opcional), lançadoEm, atualizadoEm  
-  Constraint unique: (aluno_id, encontro_id, criterio_id)
+- `Nota`: id, alunoId, sabadoId, criterioId, valor, observacao (opcional), lançadoEm, atualizadoEm  
+  Constraint unique: (aluno_id, sabado_id, criterio_id)
 
 Seeds iniciais (profile `dev`, `ranking.seed.enabled=true`):
 - Turma: Juvenis
 - Alunos da planilha: Luísa, Júlia, Sofhia, Adrielly, Lorena, Valentina, Esther, João, Isaque, João Levi, Vitória, Manuela, João Pedro, João Lucas, João Arthur
-- Trimestre com 13 encontros (Sábado 1–13)
+- Trimestre com 13 sábados (Sábado 1–13)
 - 3 critérios genéricos (Critério A, B e C)
 
 ## API REST
@@ -78,18 +80,18 @@ OpenAPI JSON: `http://localhost:8080/v3/api-docs`
 - `PUT /api/alunos/{id}`
 - `PATCH /api/alunos/{id}/ativo` (ativar/inativar)
 
-### Trimestres / Encontros / Critérios
+### Trimestres / Sábados / Critérios
 - `GET|POST /api/turmas/{turmaId}/trimestres`
 - `GET|PUT /api/trimestres/{id}`
-- `POST /api/trimestres/{id}/encontros` (criar em lote: quantidade N)
-- `GET /api/trimestres/{id}/encontros`
+- `POST /api/trimestres/{id}/sabados` (criar em lote: quantidade N)
+- `GET /api/trimestres/{id}/sabados`
 - `GET|POST /api/trimestres/{id}/criterios`
 - `PUT /api/criterios/{id}`
 
 ### Notas (lançamento)
-- `PUT /api/notas` — upsert de uma nota `{ alunoId, encontroId, criterioId, valor, observacao? }`
+- `PUT /api/notas` — upsert de uma nota `{ alunoId, sabadoId, criterioId, valor, observacao? }`
 - `PUT /api/notas/lote` — upsert em lote (tela de lançamento do sábado)
-- `GET /api/trimestres/{trimestreId}/notas?encontroId=&criterioId=` — grade para a tela
+- `GET /api/trimestres/{trimestreId}/notas?sabadoId=&criterioId=` — grade para a tela
 - `GET /api/alunos/{alunoId}/historico?trimestreId=` — notas + totais do aluno
 
 ### Ranking
@@ -159,7 +161,7 @@ Dependências **sempre apontando para dentro** (domínio no centro). Frameworks 
 ```text
 br.com.setebit.ranking
 ├── domain                      # Entidades e regras puras (sem Spring/JPA)
-│   ├── model                   # Turma, Aluno, Trimestre, Encontro, Criterio, Nota...
+│   ├── model                   # Turma, Aluno, Trimestre, Sabado, Criterio, Nota...
 │   ├── exception               # DomainException, ResourceNotFoundException, BusinessRuleException
 │   └── service                 # RankingCalculator (puro)
 ├── application                 # Casos de uso (orquestração)

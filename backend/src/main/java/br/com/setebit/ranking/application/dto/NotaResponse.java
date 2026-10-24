@@ -6,7 +6,7 @@ import java.time.Instant;
 public record NotaResponse(
 		Long id,
 		Long alunoId,
-		Long encontroId,
+		Long sabadoId,
 		Long criterioId,
 		BigDecimal valor,
 		String observacao,

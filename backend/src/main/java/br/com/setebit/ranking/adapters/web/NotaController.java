@@ -29,7 +29,7 @@ public class NotaController {
 	public NotaResponse upsert(@Valid @RequestBody NotaRequest request) {
 		return manageNotaUseCase.upsert(
 				request.alunoId(),
-				request.encontroId(),
+				request.sabadoId(),
 				request.criterioId(),
 				request.valor(),
 				request.observacao());
@@ -40,7 +40,7 @@ public class NotaController {
 	public List<NotaResponse> upsertLote(@Valid @RequestBody NotaLoteRequest request) {
 		List<ManageNotaUseCase.NotaItem> itens = request.itens().stream()
 				.map(i -> new ManageNotaUseCase.NotaItem(
-						i.alunoId(), i.encontroId(), i.criterioId(), i.valor(), i.observacao()))
+						i.alunoId(), i.sabadoId(), i.criterioId(), i.valor(), i.observacao()))
 				.toList();
 		return manageNotaUseCase.upsertLote(itens);
 	}

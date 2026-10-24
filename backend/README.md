@@ -71,7 +71,7 @@ O wrapper usa `.mvn/settings.xml` (Maven Central), para não depender do Nexus d
 1. `POST /api/turmas` — criar turma (ou usar seed Juvenis)
 2. `POST /api/turmas/{id}/alunos` — cadastrar alunos
 3. `POST /api/turmas/{id}/trimestres` — criar trimestre
-4. `POST /api/trimestres/{id}/encontros` — `{ "quantidade": 13 }`
+4. `POST /api/trimestres/{id}/sabados` — `{ "quantidade": 13 }`
 5. `POST /api/trimestres/{id}/criterios` — critérios A/B/C
 6. `PUT /api/notas` ou `PUT /api/notas/lote` — lançar pontos
 7. `GET /api/trimestres/{id}/ranking` — ranking (só alunos ativos)

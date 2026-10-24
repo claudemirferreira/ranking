@@ -14,7 +14,7 @@
     <parameter name="TITULO" class="java.lang.String"/>
     <parameter name="TRIMESTRE" class="java.lang.String"/>
     <parameter name="TURMA" class="java.lang.String"/>
-    <parameter name="ENCONTRO" class="java.lang.String"/>
+    <parameter name="SABADO" class="java.lang.String"/>
     <parameter name="LOGO" class="java.io.InputStream"/>
     <field name="posicao" class="java.lang.Integer"/>
     <field name="nome" class="java.lang.String"/>
@@ -48,7 +48,7 @@
                 <textElement>
                     <font size="8"/>
                 </textElement>
-                <textFieldExpression><![CDATA["Encontro: " + $P{ENCONTRO}]]></textFieldExpression>
+                <textFieldExpression><![CDATA["Sábado: " + $P{SABADO}]]></textFieldExpression>
             </textField>
         </band>
     </title>

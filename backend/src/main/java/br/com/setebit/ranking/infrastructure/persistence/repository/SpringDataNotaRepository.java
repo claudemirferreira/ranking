@@ -9,29 +9,29 @@ import org.springframework.data.repository.query.Param;
 
 public interface SpringDataNotaRepository extends JpaRepository<NotaJpaEntity, Long> {
 
-	Optional<NotaJpaEntity> findByAlunoIdAndEncontroIdAndCriterioId(Long alunoId, Long encontroId, Long criterioId);
+	Optional<NotaJpaEntity> findByAlunoIdAndSabadoIdAndCriterioId(Long alunoId, Long sabadoId, Long criterioId);
 
 	@Query("""
 			select n from NotaJpaEntity n
-			where n.encontroId in (select e.id from EncontroJpaEntity e where e.trimestreId = :trimestreId)
+			where n.sabadoId in (select e.id from SabadoJpaEntity e where e.trimestreId = :trimestreId)
 			""")
 	List<NotaJpaEntity> findByTrimestreId(@Param("trimestreId") Long trimestreId);
 
 	@Query("""
 			select n from NotaJpaEntity n
-			where n.encontroId in (select e.id from EncontroJpaEntity e where e.trimestreId = :trimestreId)
-			  and (:encontroId is null or n.encontroId = :encontroId)
+			where n.sabadoId in (select e.id from SabadoJpaEntity e where e.trimestreId = :trimestreId)
+			  and (:sabadoId is null or n.sabadoId = :sabadoId)
 			  and (:criterioId is null or n.criterioId = :criterioId)
 			""")
 	List<NotaJpaEntity> findByTrimestreIdFiltered(
 			@Param("trimestreId") Long trimestreId,
-			@Param("encontroId") Long encontroId,
+			@Param("sabadoId") Long sabadoId,
 			@Param("criterioId") Long criterioId);
 
 	@Query("""
 			select n from NotaJpaEntity n
 			where n.alunoId = :alunoId
-			  and n.encontroId in (select e.id from EncontroJpaEntity e where e.trimestreId = :trimestreId)
+			  and n.sabadoId in (select e.id from SabadoJpaEntity e where e.trimestreId = :trimestreId)
 			""")
 	List<NotaJpaEntity> findByAlunoIdAndTrimestreId(@Param("alunoId") Long alunoId, @Param("trimestreId") Long trimestreId);
 

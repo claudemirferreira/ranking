@@ -10,11 +10,11 @@ public interface NotaRepositoryPort {
 
 	List<Nota> saveAll(List<Nota> notas);
 
-	Optional<Nota> findByAlunoIdAndEncontroIdAndCriterioId(Long alunoId, Long encontroId, Long criterioId);
+	Optional<Nota> findByAlunoIdAndSabadoIdAndCriterioId(Long alunoId, Long sabadoId, Long criterioId);
 
 	List<Nota> findByTrimestreId(Long trimestreId);
 
-	List<Nota> findByTrimestreIdFiltered(Long trimestreId, Long encontroId, Long criterioId);
+	List<Nota> findByTrimestreIdFiltered(Long trimestreId, Long sabadoId, Long criterioId);
 
 	List<Nota> findByAlunoIdAndTrimestreId(Long alunoId, Long trimestreId);
 

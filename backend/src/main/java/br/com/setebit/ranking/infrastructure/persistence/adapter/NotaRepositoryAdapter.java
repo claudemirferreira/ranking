@@ -30,8 +30,8 @@ public class NotaRepositoryAdapter implements NotaRepositoryPort {
 	}
 
 	@Override
-	public Optional<Nota> findByAlunoIdAndEncontroIdAndCriterioId(Long alunoId, Long encontroId, Long criterioId) {
-		return repository.findByAlunoIdAndEncontroIdAndCriterioId(alunoId, encontroId, criterioId).map(JpaMapper::toDomain);
+	public Optional<Nota> findByAlunoIdAndSabadoIdAndCriterioId(Long alunoId, Long sabadoId, Long criterioId) {
+		return repository.findByAlunoIdAndSabadoIdAndCriterioId(alunoId, sabadoId, criterioId).map(JpaMapper::toDomain);
 	}
 
 	@Override
@@ -40,8 +40,8 @@ public class NotaRepositoryAdapter implements NotaRepositoryPort {
 	}
 
 	@Override
-	public List<Nota> findByTrimestreIdFiltered(Long trimestreId, Long encontroId, Long criterioId) {
-		return repository.findByTrimestreIdFiltered(trimestreId, encontroId, criterioId).stream()
+	public List<Nota> findByTrimestreIdFiltered(Long trimestreId, Long sabadoId, Long criterioId) {
+		return repository.findByTrimestreIdFiltered(trimestreId, sabadoId, criterioId).stream()
 				.map(JpaMapper::toDomain)
 				.toList();
 	}

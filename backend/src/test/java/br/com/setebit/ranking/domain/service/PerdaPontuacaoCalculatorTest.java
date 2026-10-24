@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import br.com.setebit.ranking.domain.model.Aluno;
 import br.com.setebit.ranking.domain.model.Criterio;
-import br.com.setebit.ranking.domain.model.Encontro;
+import br.com.setebit.ranking.domain.model.Sabado;
 import br.com.setebit.ranking.domain.model.Nota;
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,7 +17,7 @@ class PerdaPontuacaoCalculatorTest {
 	@Test
 	void shouldRankCriteriaByLostPoints() {
 		Aluno aluno = aluno(1L, "Ana");
-		Encontro encontro = encontro(10L, 1);
+		Sabado sabado = sabado(10L, 1);
 		Criterio presenca = criterio(1L, "Presença", "10");
 		Criterio oracao = criterio(2L, "Oração", "10");
 
@@ -25,7 +25,7 @@ class PerdaPontuacaoCalculatorTest {
 				nota(1L, 10L, 1L, "10"),
 				nota(1L, 10L, 2L, "4"));
 
-		var itens = calculator.calculate(List.of(aluno), List.of(encontro), List.of(presenca, oracao), notas);
+		var itens = calculator.calculate(List.of(aluno), List.of(sabado), List.of(presenca, oracao), notas);
 
 		assertEquals(2, itens.size());
 		assertEquals("Oração", itens.get(0).nome());
@@ -37,10 +37,10 @@ class PerdaPontuacaoCalculatorTest {
 	@Test
 	void shouldCountMissingNotesAsFullLoss() {
 		Aluno aluno = aluno(1L, "Ana");
-		Encontro encontro = encontro(10L, 1);
+		Sabado sabado = sabado(10L, 1);
 		Criterio presenca = criterio(1L, "Presença", "10");
 
-		var itens = calculator.calculate(List.of(aluno), List.of(encontro), List.of(presenca), List.of());
+		var itens = calculator.calculate(List.of(aluno), List.of(sabado), List.of(presenca), List.of());
 
 		assertEquals(1, itens.size());
 		assertEquals(0, new BigDecimal("10").compareTo(itens.getFirst().pontosPerdidos()));
@@ -55,11 +55,11 @@ class PerdaPontuacaoCalculatorTest {
 		return aluno;
 	}
 
-	private static Encontro encontro(Long id, int numero) {
-		Encontro encontro = new Encontro();
-		encontro.setId(id);
-		encontro.setNumero(numero);
-		return encontro;
+	private static Sabado sabado(Long id, int numero) {
+		Sabado sabado = new Sabado();
+		sabado.setId(id);
+		sabado.setNumero(numero);
+		return sabado;
 	}
 
 	private static Criterio criterio(Long id, String nome, String maximo) {
@@ -70,10 +70,10 @@ class PerdaPontuacaoCalculatorTest {
 		return criterio;
 	}
 
-	private static Nota nota(Long alunoId, Long encontroId, Long criterioId, String valor) {
+	private static Nota nota(Long alunoId, Long sabadoId, Long criterioId, String valor) {
 		Nota nota = new Nota();
 		nota.setAlunoId(alunoId);
-		nota.setEncontroId(encontroId);
+		nota.setSabadoId(sabadoId);
 		nota.setCriterioId(criterioId);
 		nota.setValor(new BigDecimal(valor));
 		return nota;

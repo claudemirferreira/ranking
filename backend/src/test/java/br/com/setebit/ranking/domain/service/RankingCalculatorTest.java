@@ -65,7 +65,7 @@ class RankingCalculatorTest {
 	private static Nota nota(Long alunoId, Long criterioId, String valor) {
 		Nota nota = new Nota();
 		nota.setAlunoId(alunoId);
-		nota.setEncontroId(1L);
+		nota.setSabadoId(1L);
 		nota.setCriterioId(criterioId);
 		nota.setValor(new BigDecimal(valor));
 		return nota;

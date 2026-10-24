@@ -1,7 +1,7 @@
 package br.com.setebit.ranking.domain.service;
 
 import br.com.setebit.ranking.domain.model.Aluno;
-import br.com.setebit.ranking.domain.model.Encontro;
+import br.com.setebit.ranking.domain.model.Sabado;
 import br.com.setebit.ranking.domain.model.Nota;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,19 +13,19 @@ import java.util.Objects;
 
 public class EvolucaoPontuacaoCalculator {
 
-	public Evolucao calculate(List<Aluno> alunosAtivos, List<Encontro> encontros, List<Nota> notas) {
-		List<Encontro> ordered = encontros.stream()
-				.sorted(Comparator.comparingInt(Encontro::getNumero))
+	public Evolucao calculate(List<Aluno> alunosAtivos, List<Sabado> sabados, List<Nota> notas) {
+		List<Sabado> ordered = sabados.stream()
+				.sorted(Comparator.comparingInt(Sabado::getNumero))
 				.toList();
 
-		Map<Long, Map<Long, BigDecimal>> pontosPorAlunoEncontro = new HashMap<>();
+		Map<Long, Map<Long, BigDecimal>> pontosPorAlunoSabado = new HashMap<>();
 		for (Nota nota : notas) {
 			if (nota.getValor() == null) {
 				continue;
 			}
-			pontosPorAlunoEncontro
+			pontosPorAlunoSabado
 					.computeIfAbsent(nota.getAlunoId(), ignored -> new HashMap<>())
-					.merge(nota.getEncontroId(), nota.getValor(), BigDecimal::add);
+					.merge(nota.getSabadoId(), nota.getValor(), BigDecimal::add);
 		}
 
 		List<AlunoSerie> series = new ArrayList<>();
@@ -34,12 +34,12 @@ public class EvolucaoPontuacaoCalculator {
 				.toList();
 
 		for (Aluno aluno : orderedAlunos) {
-			Map<Long, BigDecimal> porEncontro = pontosPorAlunoEncontro.getOrDefault(aluno.getId(), Map.of());
+			Map<Long, BigDecimal> porSabado = pontosPorAlunoSabado.getOrDefault(aluno.getId(), Map.of());
 			List<BigDecimal> pontosPorSabado = new ArrayList<>();
 			List<BigDecimal> acumulado = new ArrayList<>();
 			BigDecimal soma = BigDecimal.ZERO;
-			for (Encontro encontro : ordered) {
-				BigDecimal pontos = porEncontro.getOrDefault(encontro.getId(), BigDecimal.ZERO);
+			for (Sabado sabado : ordered) {
+				BigDecimal pontos = porSabado.getOrDefault(sabado.getId(), BigDecimal.ZERO);
 				pontosPorSabado.add(pontos);
 				soma = soma.add(pontos);
 				acumulado.add(soma);

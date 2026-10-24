@@ -7,7 +7,7 @@ public class Nota {
 
 	private Long id;
 	private Long alunoId;
-	private Long encontroId;
+	private Long sabadoId;
 	private Long criterioId;
 	private BigDecimal valor;
 	private String observacao;
@@ -30,12 +30,12 @@ public class Nota {
 		this.alunoId = alunoId;
 	}
 
-	public Long getEncontroId() {
-		return encontroId;
+	public Long getSabadoId() {
+		return sabadoId;
 	}
 
-	public void setEncontroId(Long encontroId) {
-		this.encontroId = encontroId;
+	public void setSabadoId(Long sabadoId) {
+		this.sabadoId = sabadoId;
 	}
 
 	public Long getCriterioId() {

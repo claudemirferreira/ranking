@@ -2,13 +2,13 @@ package br.com.setebit.ranking.application.mapper;
 
 import br.com.setebit.ranking.application.dto.AlunoResponse;
 import br.com.setebit.ranking.application.dto.CriterioResponse;
-import br.com.setebit.ranking.application.dto.EncontroResponse;
+import br.com.setebit.ranking.application.dto.SabadoResponse;
 import br.com.setebit.ranking.application.dto.NotaResponse;
 import br.com.setebit.ranking.application.dto.TrimestreResponse;
 import br.com.setebit.ranking.application.dto.TurmaResponse;
 import br.com.setebit.ranking.domain.model.Aluno;
 import br.com.setebit.ranking.domain.model.Criterio;
-import br.com.setebit.ranking.domain.model.Encontro;
+import br.com.setebit.ranking.domain.model.Sabado;
 import br.com.setebit.ranking.domain.model.Nota;
 import br.com.setebit.ranking.domain.model.Trimestre;
 import br.com.setebit.ranking.domain.model.Turma;
@@ -52,13 +52,13 @@ public final class ApplicationMapper {
 				trimestre.getUpdatedAt());
 	}
 
-	public static EncontroResponse toResponse(Encontro encontro) {
-		return new EncontroResponse(
-				encontro.getId(),
-				encontro.getTrimestreId(),
-				encontro.getNumero(),
-				encontro.getData(),
-				encontro.getTitulo());
+	public static SabadoResponse toResponse(Sabado sabado) {
+		return new SabadoResponse(
+				sabado.getId(),
+				sabado.getTrimestreId(),
+				sabado.getNumero(),
+				sabado.getData(),
+				sabado.getTitulo());
 	}
 
 	public static CriterioResponse toResponse(Criterio criterio) {
@@ -74,7 +74,7 @@ public final class ApplicationMapper {
 		return new NotaResponse(
 				nota.getId(),
 				nota.getAlunoId(),
-				nota.getEncontroId(),
+				nota.getSabadoId(),
 				nota.getCriterioId(),
 				nota.getValor(),
 				nota.getObservacao(),

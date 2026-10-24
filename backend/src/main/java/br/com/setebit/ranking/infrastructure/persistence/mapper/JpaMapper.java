@@ -2,13 +2,13 @@ package br.com.setebit.ranking.infrastructure.persistence.mapper;
 
 import br.com.setebit.ranking.domain.model.Aluno;
 import br.com.setebit.ranking.domain.model.Criterio;
-import br.com.setebit.ranking.domain.model.Encontro;
+import br.com.setebit.ranking.domain.model.Sabado;
 import br.com.setebit.ranking.domain.model.Nota;
 import br.com.setebit.ranking.domain.model.Trimestre;
 import br.com.setebit.ranking.domain.model.Turma;
 import br.com.setebit.ranking.infrastructure.persistence.entity.AlunoJpaEntity;
 import br.com.setebit.ranking.infrastructure.persistence.entity.CriterioJpaEntity;
-import br.com.setebit.ranking.infrastructure.persistence.entity.EncontroJpaEntity;
+import br.com.setebit.ranking.infrastructure.persistence.entity.SabadoJpaEntity;
 import br.com.setebit.ranking.infrastructure.persistence.entity.NotaJpaEntity;
 import br.com.setebit.ranking.infrastructure.persistence.entity.TrimestreJpaEntity;
 import br.com.setebit.ranking.infrastructure.persistence.entity.TurmaJpaEntity;
@@ -94,18 +94,18 @@ public final class JpaMapper {
 		return entity;
 	}
 
-	public static Encontro toDomain(EncontroJpaEntity entity) {
-		Encontro encontro = new Encontro();
-		encontro.setId(entity.getId());
-		encontro.setTrimestreId(entity.getTrimestreId());
-		encontro.setNumero(entity.getNumero());
-		encontro.setData(entity.getData());
-		encontro.setTitulo(entity.getTitulo());
-		return encontro;
+	public static Sabado toDomain(SabadoJpaEntity entity) {
+		Sabado sabado = new Sabado();
+		sabado.setId(entity.getId());
+		sabado.setTrimestreId(entity.getTrimestreId());
+		sabado.setNumero(entity.getNumero());
+		sabado.setData(entity.getData());
+		sabado.setTitulo(entity.getTitulo());
+		return sabado;
 	}
 
-	public static EncontroJpaEntity toEntity(Encontro domain) {
-		EncontroJpaEntity entity = new EncontroJpaEntity();
+	public static SabadoJpaEntity toEntity(Sabado domain) {
+		SabadoJpaEntity entity = new SabadoJpaEntity();
 		entity.setId(domain.getId());
 		entity.setTrimestreId(domain.getTrimestreId());
 		entity.setNumero(domain.getNumero());
@@ -138,7 +138,7 @@ public final class JpaMapper {
 		Nota nota = new Nota();
 		nota.setId(entity.getId());
 		nota.setAlunoId(entity.getAlunoId());
-		nota.setEncontroId(entity.getEncontroId());
+		nota.setSabadoId(entity.getSabadoId());
 		nota.setCriterioId(entity.getCriterioId());
 		nota.setValor(entity.getValor());
 		nota.setObservacao(entity.getObservacao());
@@ -151,7 +151,7 @@ public final class JpaMapper {
 		NotaJpaEntity entity = new NotaJpaEntity();
 		entity.setId(domain.getId());
 		entity.setAlunoId(domain.getAlunoId());
-		entity.setEncontroId(domain.getEncontroId());
+		entity.setSabadoId(domain.getSabadoId());
 		entity.setCriterioId(domain.getCriterioId());
 		entity.setValor(domain.getValor());
 		entity.setObservacao(domain.getObservacao());

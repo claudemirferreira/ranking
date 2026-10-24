@@ -8,14 +8,14 @@ import br.com.setebit.ranking.application.port.in.ManageTrimestreUseCase;
 import br.com.setebit.ranking.application.port.in.ManageTurmaUseCase;
 import br.com.setebit.ranking.application.port.out.AlunoRepositoryPort;
 import br.com.setebit.ranking.application.port.out.CriterioRepositoryPort;
-import br.com.setebit.ranking.application.port.out.EncontroRepositoryPort;
+import br.com.setebit.ranking.application.port.out.SabadoRepositoryPort;
 import br.com.setebit.ranking.application.port.out.LancamentoPdfReportPort;
 import br.com.setebit.ranking.application.port.out.NotaRepositoryPort;
 import br.com.setebit.ranking.domain.exception.BusinessRuleException;
 import br.com.setebit.ranking.domain.exception.ResourceNotFoundException;
 import br.com.setebit.ranking.domain.model.Aluno;
 import br.com.setebit.ranking.domain.model.Criterio;
-import br.com.setebit.ranking.domain.model.Encontro;
+import br.com.setebit.ranking.domain.model.Sabado;
 import br.com.setebit.ranking.domain.model.Nota;
 import br.com.setebit.ranking.domain.service.RankingCalculator;
 import java.util.HashMap;
@@ -31,7 +31,7 @@ public class ExportLancamentoPdfUseCaseImpl implements ExportLancamentoPdfUseCas
 
 	private final ManageTrimestreUseCase manageTrimestreUseCase;
 	private final ManageTurmaUseCase manageTurmaUseCase;
-	private final EncontroRepositoryPort encontroRepository;
+	private final SabadoRepositoryPort sabadoRepository;
 	private final AlunoRepositoryPort alunoRepository;
 	private final NotaRepositoryPort notaRepository;
 	private final CriterioRepositoryPort criterioRepository;
@@ -41,14 +41,14 @@ public class ExportLancamentoPdfUseCaseImpl implements ExportLancamentoPdfUseCas
 	public ExportLancamentoPdfUseCaseImpl(
 			ManageTrimestreUseCase manageTrimestreUseCase,
 			ManageTurmaUseCase manageTurmaUseCase,
-			EncontroRepositoryPort encontroRepository,
+			SabadoRepositoryPort sabadoRepository,
 			AlunoRepositoryPort alunoRepository,
 			NotaRepositoryPort notaRepository,
 			CriterioRepositoryPort criterioRepository,
 			LancamentoPdfReportPort lancamentoPdfReportPort) {
 		this.manageTrimestreUseCase = manageTrimestreUseCase;
 		this.manageTurmaUseCase = manageTurmaUseCase;
-		this.encontroRepository = encontroRepository;
+		this.sabadoRepository = sabadoRepository;
 		this.alunoRepository = alunoRepository;
 		this.notaRepository = notaRepository;
 		this.criterioRepository = criterioRepository;
@@ -56,22 +56,22 @@ public class ExportLancamentoPdfUseCaseImpl implements ExportLancamentoPdfUseCas
 	}
 
 	@Override
-	public byte[] execute(Long trimestreId, Long encontroId) {
+	public byte[] execute(Long trimestreId, Long sabadoId) {
 		TrimestreResponse trimestre = manageTrimestreUseCase.getById(trimestreId);
 		TurmaResponse turma = manageTurmaUseCase.getById(trimestre.turmaId());
 
-		Encontro encontro = encontroRepository.findById(encontroId)
-				.orElseThrow(() -> new ResourceNotFoundException("Encontro não encontrado: " + encontroId));
-		if (!encontro.getTrimestreId().equals(trimestreId)) {
-			throw new BusinessRuleException("Encontro não pertence ao trimestre informado");
+		Sabado sabado = sabadoRepository.findById(sabadoId)
+				.orElseThrow(() -> new ResourceNotFoundException("Sábado não encontrado: " + sabadoId));
+		if (!sabado.getTrimestreId().equals(trimestreId)) {
+			throw new BusinessRuleException("Sábado não pertence ao trimestre informado");
 		}
 
 		List<Aluno> alunosAtivos = alunoRepository.findActiveByTurmaId(trimestre.turmaId());
 		List<Criterio> criterios = criterioRepository.findByTrimestreId(trimestreId);
-		List<Nota> notasDoEncontro = notaRepository.findByTrimestreIdFiltered(trimestreId, encontroId, null);
+		List<Nota> notasDoSabado = notaRepository.findByTrimestreIdFiltered(trimestreId, sabadoId, null);
 
 		List<RankingCalculator.RankingEntry> ranking =
-				rankingCalculator.calculate(alunosAtivos, notasDoEncontro, criterios);
+				rankingCalculator.calculate(alunosAtivos, notasDoSabado, criterios);
 
 		List<LancamentoPdfRow> rows = ranking.stream()
 				.map(item -> new LancamentoPdfRow(
@@ -81,15 +81,15 @@ public class ExportLancamentoPdfUseCaseImpl implements ExportLancamentoPdfUseCas
 						formatCriterios(item.porCriterio())))
 				.toList();
 
-		String encontroTitulo = encontro.getTitulo() != null && !encontro.getTitulo().isBlank()
-				? encontro.getTitulo()
-				: "Sábado " + encontro.getNumero();
+		String sabadoTitulo = sabado.getTitulo() != null && !sabado.getTitulo().isBlank()
+				? sabado.getTitulo()
+				: "Sábado " + sabado.getNumero();
 
 		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("TITULO", "Lançamento — " + encontroTitulo);
+		parameters.put("TITULO", "Lançamento — " + sabadoTitulo);
 		parameters.put("TRIMESTRE", trimestre.nome());
 		parameters.put("TURMA", turma.nome());
-		parameters.put("ENCONTRO", encontroTitulo);
+		parameters.put("SABADO", sabadoTitulo);
 
 		return lancamentoPdfReportPort.generate(parameters, rows);
 	}

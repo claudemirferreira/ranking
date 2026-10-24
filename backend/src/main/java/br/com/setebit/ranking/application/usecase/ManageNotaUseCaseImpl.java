@@ -6,14 +6,14 @@ import br.com.setebit.ranking.application.mapper.ApplicationMapper;
 import br.com.setebit.ranking.application.port.in.ManageNotaUseCase;
 import br.com.setebit.ranking.application.port.out.AlunoRepositoryPort;
 import br.com.setebit.ranking.application.port.out.CriterioRepositoryPort;
-import br.com.setebit.ranking.application.port.out.EncontroRepositoryPort;
+import br.com.setebit.ranking.application.port.out.SabadoRepositoryPort;
 import br.com.setebit.ranking.application.port.out.NotaRepositoryPort;
 import br.com.setebit.ranking.application.port.out.TrimestreRepositoryPort;
 import br.com.setebit.ranking.domain.exception.BusinessRuleException;
 import br.com.setebit.ranking.domain.exception.ResourceNotFoundException;
 import br.com.setebit.ranking.domain.model.Aluno;
 import br.com.setebit.ranking.domain.model.Criterio;
-import br.com.setebit.ranking.domain.model.Encontro;
+import br.com.setebit.ranking.domain.model.Sabado;
 import br.com.setebit.ranking.domain.model.Nota;
 import br.com.setebit.ranking.domain.model.Trimestre;
 import java.math.BigDecimal;
@@ -29,42 +29,42 @@ public class ManageNotaUseCaseImpl implements ManageNotaUseCase {
 
 	private final NotaRepositoryPort notaRepository;
 	private final AlunoRepositoryPort alunoRepository;
-	private final EncontroRepositoryPort encontroRepository;
+	private final SabadoRepositoryPort sabadoRepository;
 	private final CriterioRepositoryPort criterioRepository;
 	private final TrimestreRepositoryPort trimestreRepository;
 
 	public ManageNotaUseCaseImpl(
 			NotaRepositoryPort notaRepository,
 			AlunoRepositoryPort alunoRepository,
-			EncontroRepositoryPort encontroRepository,
+			SabadoRepositoryPort sabadoRepository,
 			CriterioRepositoryPort criterioRepository,
 			TrimestreRepositoryPort trimestreRepository) {
 		this.notaRepository = notaRepository;
 		this.alunoRepository = alunoRepository;
-		this.encontroRepository = encontroRepository;
+		this.sabadoRepository = sabadoRepository;
 		this.criterioRepository = criterioRepository;
 		this.trimestreRepository = trimestreRepository;
 	}
 
 	@Override
-	public NotaResponse upsert(Long alunoId, Long encontroId, Long criterioId, BigDecimal valor, String observacao) {
-		return ApplicationMapper.toResponse(upsertInternal(alunoId, encontroId, criterioId, valor, observacao));
+	public NotaResponse upsert(Long alunoId, Long sabadoId, Long criterioId, BigDecimal valor, String observacao) {
+		return ApplicationMapper.toResponse(upsertInternal(alunoId, sabadoId, criterioId, valor, observacao));
 	}
 
 	@Override
 	public List<NotaResponse> upsertLote(List<NotaItem> itens) {
 		List<Nota> salvas = new ArrayList<>();
 		for (NotaItem item : itens) {
-			salvas.add(upsertInternal(item.alunoId(), item.encontroId(), item.criterioId(), item.valor(), item.observacao()));
+			salvas.add(upsertInternal(item.alunoId(), item.sabadoId(), item.criterioId(), item.valor(), item.observacao()));
 		}
 		return salvas.stream().map(ApplicationMapper::toResponse).toList();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<NotaResponse> listByTrimestre(Long trimestreId, Long encontroId, Long criterioId) {
+	public List<NotaResponse> listByTrimestre(Long trimestreId, Long sabadoId, Long criterioId) {
 		requireTrimestre(trimestreId);
-		return notaRepository.findByTrimestreIdFiltered(trimestreId, encontroId, criterioId).stream()
+		return notaRepository.findByTrimestreIdFiltered(trimestreId, sabadoId, criterioId).stream()
 				.map(ApplicationMapper::toResponse)
 				.toList();
 	}
@@ -84,18 +84,18 @@ public class ManageNotaUseCaseImpl implements ManageNotaUseCase {
 				notas.stream().map(ApplicationMapper::toResponse).toList());
 	}
 
-	private Nota upsertInternal(Long alunoId, Long encontroId, Long criterioId, BigDecimal valor, String observacao) {
+	private Nota upsertInternal(Long alunoId, Long sabadoId, Long criterioId, BigDecimal valor, String observacao) {
 		Aluno aluno = requireAluno(alunoId);
-		Encontro encontro = encontroRepository.findById(encontroId)
-				.orElseThrow(() -> new ResourceNotFoundException("Encontro não encontrado: " + encontroId));
+		Sabado sabado = sabadoRepository.findById(sabadoId)
+				.orElseThrow(() -> new ResourceNotFoundException("Sábado não encontrado: " + sabadoId));
 		Criterio criterio = criterioRepository.findById(criterioId)
 				.orElseThrow(() -> new ResourceNotFoundException("Critério não encontrado: " + criterioId));
 
-		if (!encontro.getTrimestreId().equals(criterio.getTrimestreId())) {
-			throw new BusinessRuleException("Encontro e critério devem pertencer ao mesmo trimestre");
+		if (!sabado.getTrimestreId().equals(criterio.getTrimestreId())) {
+			throw new BusinessRuleException("Sábado e critério devem pertencer ao mesmo trimestre");
 		}
 
-		Trimestre trimestre = requireTrimestre(encontro.getTrimestreId());
+		Trimestre trimestre = requireTrimestre(sabado.getTrimestreId());
 		if (!aluno.getTurmaId().equals(trimestre.getTurmaId())) {
 			throw new BusinessRuleException("Aluno não pertence à turma do trimestre");
 		}
@@ -110,12 +110,12 @@ public class ManageNotaUseCaseImpl implements ManageNotaUseCase {
 
 		Instant now = Instant.now();
 		Nota nota = notaRepository
-				.findByAlunoIdAndEncontroIdAndCriterioId(alunoId, encontroId, criterioId)
+				.findByAlunoIdAndSabadoIdAndCriterioId(alunoId, sabadoId, criterioId)
 				.orElseGet(Nota::new);
 
 		if (nota.getId() == null) {
 			nota.setAlunoId(alunoId);
-			nota.setEncontroId(encontroId);
+			nota.setSabadoId(sabadoId);
 			nota.setCriterioId(criterioId);
 			nota.setLancadoEm(now);
 		}

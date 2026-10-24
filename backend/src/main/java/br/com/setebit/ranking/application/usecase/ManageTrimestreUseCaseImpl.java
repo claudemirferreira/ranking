@@ -1,18 +1,18 @@
 package br.com.setebit.ranking.application.usecase;
 
 import br.com.setebit.ranking.application.dto.CriterioResponse;
-import br.com.setebit.ranking.application.dto.EncontroResponse;
+import br.com.setebit.ranking.application.dto.SabadoResponse;
 import br.com.setebit.ranking.application.dto.TrimestreResponse;
 import br.com.setebit.ranking.application.mapper.ApplicationMapper;
 import br.com.setebit.ranking.application.port.in.ManageTrimestreUseCase;
 import br.com.setebit.ranking.application.port.out.CriterioRepositoryPort;
-import br.com.setebit.ranking.application.port.out.EncontroRepositoryPort;
+import br.com.setebit.ranking.application.port.out.SabadoRepositoryPort;
 import br.com.setebit.ranking.application.port.out.TrimestreRepositoryPort;
 import br.com.setebit.ranking.application.port.out.TurmaRepositoryPort;
 import br.com.setebit.ranking.domain.exception.BusinessRuleException;
 import br.com.setebit.ranking.domain.exception.ResourceNotFoundException;
 import br.com.setebit.ranking.domain.model.Criterio;
-import br.com.setebit.ranking.domain.model.Encontro;
+import br.com.setebit.ranking.domain.model.Sabado;
 import br.com.setebit.ranking.domain.model.Trimestre;
 import br.com.setebit.ranking.domain.model.Turma;
 import java.math.BigDecimal;
@@ -29,17 +29,17 @@ public class ManageTrimestreUseCaseImpl implements ManageTrimestreUseCase {
 
 	private final TrimestreRepositoryPort trimestreRepository;
 	private final TurmaRepositoryPort turmaRepository;
-	private final EncontroRepositoryPort encontroRepository;
+	private final SabadoRepositoryPort sabadoRepository;
 	private final CriterioRepositoryPort criterioRepository;
 
 	public ManageTrimestreUseCaseImpl(
 			TrimestreRepositoryPort trimestreRepository,
 			TurmaRepositoryPort turmaRepository,
-			EncontroRepositoryPort encontroRepository,
+			SabadoRepositoryPort sabadoRepository,
 			CriterioRepositoryPort criterioRepository) {
 		this.trimestreRepository = trimestreRepository;
 		this.turmaRepository = turmaRepository;
-		this.encontroRepository = encontroRepository;
+		this.sabadoRepository = sabadoRepository;
 		this.criterioRepository = criterioRepository;
 	}
 
@@ -85,29 +85,29 @@ public class ManageTrimestreUseCaseImpl implements ManageTrimestreUseCase {
 	}
 
 	@Override
-	public List<EncontroResponse> createEncontros(Long trimestreId, int quantidade) {
+	public List<SabadoResponse> createSabados(Long trimestreId, int quantidade) {
 		if (quantidade < 1) {
-			throw new BusinessRuleException("Quantidade de encontros deve ser pelo menos 1");
+			throw new BusinessRuleException("Quantidade de sábados deve ser pelo menos 1");
 		}
 		requireTrimestre(trimestreId);
-		int existentes = encontroRepository.countByTrimestreId(trimestreId);
-		List<Encontro> novos = new ArrayList<>();
+		int existentes = sabadoRepository.countByTrimestreId(trimestreId);
+		List<Sabado> novos = new ArrayList<>();
 		for (int i = 1; i <= quantidade; i++) {
 			int numero = existentes + i;
-			Encontro encontro = new Encontro();
-			encontro.setTrimestreId(trimestreId);
-			encontro.setNumero(numero);
-			encontro.setTitulo("Sábado " + numero);
-			novos.add(encontro);
+			Sabado sabado = new Sabado();
+			sabado.setTrimestreId(trimestreId);
+			sabado.setNumero(numero);
+			sabado.setTitulo("Sábado " + numero);
+			novos.add(sabado);
 		}
-		return encontroRepository.saveAll(novos).stream().map(ApplicationMapper::toResponse).toList();
+		return sabadoRepository.saveAll(novos).stream().map(ApplicationMapper::toResponse).toList();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<EncontroResponse> listEncontros(Long trimestreId) {
+	public List<SabadoResponse> listSabados(Long trimestreId) {
 		requireTrimestre(trimestreId);
-		return encontroRepository.findByTrimestreId(trimestreId).stream().map(ApplicationMapper::toResponse).toList();
+		return sabadoRepository.findByTrimestreId(trimestreId).stream().map(ApplicationMapper::toResponse).toList();
 	}
 
 	@Override

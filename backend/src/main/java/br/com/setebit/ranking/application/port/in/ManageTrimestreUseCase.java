@@ -1,7 +1,7 @@
 package br.com.setebit.ranking.application.port.in;
 
 import br.com.setebit.ranking.application.dto.CriterioResponse;
-import br.com.setebit.ranking.application.dto.EncontroResponse;
+import br.com.setebit.ranking.application.dto.SabadoResponse;
 import br.com.setebit.ranking.application.dto.TrimestreResponse;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,9 +17,9 @@ public interface ManageTrimestreUseCase {
 
 	List<TrimestreResponse> listByTurma(Long turmaId);
 
-	List<EncontroResponse> createEncontros(Long trimestreId, int quantidade);
+	List<SabadoResponse> createSabados(Long trimestreId, int quantidade);
 
-	List<EncontroResponse> listEncontros(Long trimestreId);
+	List<SabadoResponse> listSabados(Long trimestreId);
 
 	CriterioResponse createCriterio(Long trimestreId, String nome, Integer ordem, BigDecimal pontuacaoMaxima);
 

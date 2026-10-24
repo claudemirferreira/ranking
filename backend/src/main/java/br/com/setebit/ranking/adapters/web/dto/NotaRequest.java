@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 public record NotaRequest(
 		@NotNull Long alunoId,
-		@NotNull Long encontroId,
+		@NotNull Long sabadoId,
 		@NotNull Long criterioId,
 		@NotNull @DecimalMin("0.0") BigDecimal valor,
 		String observacao

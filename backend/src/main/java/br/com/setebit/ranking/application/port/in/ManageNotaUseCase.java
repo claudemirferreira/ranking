@@ -7,14 +7,14 @@ import java.util.List;
 
 public interface ManageNotaUseCase {
 
-	NotaResponse upsert(Long alunoId, Long encontroId, Long criterioId, BigDecimal valor, String observacao);
+	NotaResponse upsert(Long alunoId, Long sabadoId, Long criterioId, BigDecimal valor, String observacao);
 
 	List<NotaResponse> upsertLote(List<NotaItem> itens);
 
-	List<NotaResponse> listByTrimestre(Long trimestreId, Long encontroId, Long criterioId);
+	List<NotaResponse> listByTrimestre(Long trimestreId, Long sabadoId, Long criterioId);
 
 	HistoricoAlunoResponse historico(Long alunoId, Long trimestreId);
 
-	record NotaItem(Long alunoId, Long encontroId, Long criterioId, BigDecimal valor, String observacao) {
+	record NotaItem(Long alunoId, Long sabadoId, Long criterioId, BigDecimal valor, String observacao) {
 	}
 }

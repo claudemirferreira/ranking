@@ -15,7 +15,7 @@ import java.time.Instant;
 @Entity
 @Table(
 		name = "notas",
-		uniqueConstraints = @UniqueConstraint(columnNames = {"alunoId", "encontroId", "criterioId"}))
+		uniqueConstraints = @UniqueConstraint(columnNames = {"alunoId", "sabadoId", "criterioId"}))
 public class NotaJpaEntity {
 
 	@Id
@@ -25,8 +25,8 @@ public class NotaJpaEntity {
 	@Column(nullable = false)
 	private Long alunoId;
 
-	@Column(nullable = false)
-	private Long encontroId;
+	@Column(name = "sabado_id", nullable = false)
+	private Long sabadoId;
 
 	@Column(nullable = false)
 	private Long criterioId;
@@ -73,12 +73,12 @@ public class NotaJpaEntity {
 		this.alunoId = alunoId;
 	}
 
-	public Long getEncontroId() {
-		return encontroId;
+	public Long getSabadoId() {
+		return sabadoId;
 	}
 
-	public void setEncontroId(Long encontroId) {
-		this.encontroId = encontroId;
+	public void setSabadoId(Long sabadoId) {
+		this.sabadoId = sabadoId;
 	}
 
 	public Long getCriterioId() {

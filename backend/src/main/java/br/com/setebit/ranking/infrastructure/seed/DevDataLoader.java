@@ -62,7 +62,7 @@ public class DevDataLoader implements ApplicationRunner {
 				.forEach(a -> manageAlunoUseCase.create(turma.id(), a.numero(), a.nome(), null));
 
 		var trimestre = manageTrimestreUseCase.create(turma.id(), "Lição 3", null, null);
-		manageTrimestreUseCase.createEncontros(trimestre.id(), 13);
+		manageTrimestreUseCase.createSabados(trimestre.id(), 13);
 		manageTrimestreUseCase.createCriterio(trimestre.id(), "Critério A", 1, BigDecimal.TEN);
 		manageTrimestreUseCase.createCriterio(trimestre.id(), "Critério B", 2, BigDecimal.TEN);
 		manageTrimestreUseCase.createCriterio(trimestre.id(), "Critério C", 3, BigDecimal.TEN);

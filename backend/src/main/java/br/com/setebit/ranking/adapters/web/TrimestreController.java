@@ -1,10 +1,10 @@
 package br.com.setebit.ranking.adapters.web;
 
-import br.com.setebit.ranking.adapters.web.dto.CreateEncontrosRequest;
+import br.com.setebit.ranking.adapters.web.dto.CreateSabadosRequest;
 import br.com.setebit.ranking.adapters.web.dto.CriterioRequest;
 import br.com.setebit.ranking.adapters.web.dto.TrimestreRequest;
 import br.com.setebit.ranking.application.dto.CriterioResponse;
-import br.com.setebit.ranking.application.dto.EncontroResponse;
+import br.com.setebit.ranking.application.dto.SabadoResponse;
 import br.com.setebit.ranking.application.dto.EvolucaoPontuacaoResponse;
 import br.com.setebit.ranking.application.dto.NotaResponse;
 import br.com.setebit.ranking.application.dto.PerdaPontuacaoResponse;
@@ -88,18 +88,18 @@ public class TrimestreController {
 		return manageTrimestreUseCase.update(id, request.nome(), request.dataInicio(), request.dataFim(), request.ativo());
 	}
 
-	@PostMapping("/api/trimestres/{id}/encontros")
+	@PostMapping("/api/trimestres/{id}/sabados")
 	@ResponseStatus(HttpStatus.CREATED)
-	@Operation(summary = "Criar encontros (sábados) em lote")
-	public List<EncontroResponse> createEncontros(
-			@PathVariable Long id, @Valid @RequestBody CreateEncontrosRequest request) {
-		return manageTrimestreUseCase.createEncontros(id, request.quantidade());
+	@Operation(summary = "Criar sábados em lote")
+	public List<SabadoResponse> createSabados(
+			@PathVariable Long id, @Valid @RequestBody CreateSabadosRequest request) {
+		return manageTrimestreUseCase.createSabados(id, request.quantidade());
 	}
 
-	@GetMapping("/api/trimestres/{id}/encontros")
-	@Operation(summary = "Listar encontros do trimestre")
-	public List<EncontroResponse> listEncontros(@PathVariable Long id) {
-		return manageTrimestreUseCase.listEncontros(id);
+	@GetMapping("/api/trimestres/{id}/sabados")
+	@Operation(summary = "Listar sábados do trimestre")
+	public List<SabadoResponse> listSabados(@PathVariable Long id) {
+		return manageTrimestreUseCase.listSabados(id);
 	}
 
 	@PostMapping("/api/trimestres/{id}/criterios")
@@ -125,9 +125,9 @@ public class TrimestreController {
 	@Operation(summary = "Listar notas do trimestre (filtros opcionais)")
 	public List<NotaResponse> listNotas(
 			@PathVariable Long trimestreId,
-			@RequestParam(required = false) Long encontroId,
+			@RequestParam(required = false) Long sabadoId,
 			@RequestParam(required = false) Long criterioId) {
-		return manageNotaUseCase.listByTrimestre(trimestreId, encontroId, criterioId);
+		return manageNotaUseCase.listByTrimestre(trimestreId, sabadoId, criterioId);
 	}
 
 	@GetMapping("/api/trimestres/{trimestreId}/evolucao")
@@ -158,16 +158,16 @@ public class TrimestreController {
 				.body(pdf);
 	}
 
-	@GetMapping("/api/trimestres/{trimestreId}/encontros/{encontroId}/lancamento/pdf")
-	@Operation(summary = "Imprimir lançamento do encontro em PDF (ordenado por total decrescente)")
+	@GetMapping("/api/trimestres/{trimestreId}/sabados/{sabadoId}/lancamento/pdf")
+	@Operation(summary = "Imprimir lançamento do sábado em PDF (ordenado por total decrescente)")
 	public ResponseEntity<byte[]> lancamentoPdf(
 			@PathVariable Long trimestreId,
-			@PathVariable Long encontroId) {
-		byte[] pdf = exportLancamentoPdfUseCase.execute(trimestreId, encontroId);
+			@PathVariable Long sabadoId) {
+		byte[] pdf = exportLancamentoPdfUseCase.execute(trimestreId, sabadoId);
 		return ResponseEntity.ok()
 				.header(
 						HttpHeaders.CONTENT_DISPOSITION,
-						"attachment; filename=\"lancamento-trimestre-" + trimestreId + "-encontro-" + encontroId + ".pdf\"")
+						"attachment; filename=\"lancamento-trimestre-" + trimestreId + "-sabado-" + sabadoId + ".pdf\"")
 				.contentType(MediaType.APPLICATION_PDF)
 				.body(pdf);
 	}

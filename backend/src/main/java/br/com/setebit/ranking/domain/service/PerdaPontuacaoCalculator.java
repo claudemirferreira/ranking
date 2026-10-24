@@ -2,7 +2,7 @@ package br.com.setebit.ranking.domain.service;
 
 import br.com.setebit.ranking.domain.model.Aluno;
 import br.com.setebit.ranking.domain.model.Criterio;
-import br.com.setebit.ranking.domain.model.Encontro;
+import br.com.setebit.ranking.domain.model.Sabado;
 import br.com.setebit.ranking.domain.model.Nota;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,25 +19,25 @@ public class PerdaPontuacaoCalculator {
 
 	public List<CriterioPerda> calculate(
 			List<Aluno> alunosAtivos,
-			List<Encontro> encontros,
+			List<Sabado> sabados,
 			List<Criterio> criterios,
 			List<Nota> notas) {
-		if (alunosAtivos.isEmpty() || encontros.isEmpty() || criterios.isEmpty()) {
+		if (alunosAtivos.isEmpty() || sabados.isEmpty() || criterios.isEmpty()) {
 			return List.of();
 		}
 
 		Set<Long> alunoIds = alunosAtivos.stream().map(Aluno::getId).collect(Collectors.toSet());
-		Set<Long> encontroIds = encontros.stream().map(Encontro::getId).collect(Collectors.toSet());
-		int lancamentos = alunosAtivos.size() * encontros.size();
+		Set<Long> sabadoIds = sabados.stream().map(Sabado::getId).collect(Collectors.toSet());
+		int lancamentos = alunosAtivos.size() * sabados.size();
 
 		Map<String, BigDecimal> obtidoPorNota = new HashMap<>();
 		for (Nota nota : notas) {
 			if (nota.getValor() == null
 					|| !alunoIds.contains(nota.getAlunoId())
-					|| !encontroIds.contains(nota.getEncontroId())) {
+					|| !sabadoIds.contains(nota.getSabadoId())) {
 				continue;
 			}
-			String chave = nota.getAlunoId() + ":" + nota.getEncontroId() + ":" + nota.getCriterioId();
+			String chave = nota.getAlunoId() + ":" + nota.getSabadoId() + ":" + nota.getCriterioId();
 			obtidoPorNota.merge(chave, nota.getValor(), BigDecimal::add);
 		}
 
@@ -47,8 +47,8 @@ public class PerdaPontuacaoCalculator {
 			BigDecimal possiveis = maximo.multiply(BigDecimal.valueOf(lancamentos));
 			BigDecimal obtidos = BigDecimal.ZERO;
 			for (Aluno aluno : alunosAtivos) {
-				for (Encontro encontro : encontros) {
-					String chave = aluno.getId() + ":" + encontro.getId() + ":" + criterio.getId();
+				for (Sabado sabado : sabados) {
+					String chave = aluno.getId() + ":" + sabado.getId() + ":" + criterio.getId();
 					BigDecimal valor = obtidoPorNota.getOrDefault(chave, BigDecimal.ZERO);
 					if (valor.compareTo(maximo) > 0) {
 						valor = maximo;

@@ -3,7 +3,7 @@ package br.com.setebit.ranking.domain.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import br.com.setebit.ranking.domain.model.Aluno;
-import br.com.setebit.ranking.domain.model.Encontro;
+import br.com.setebit.ranking.domain.model.Sabado;
 import br.com.setebit.ranking.domain.model.Nota;
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,8 +17,8 @@ class EvolucaoPontuacaoCalculatorTest {
 	void shouldSumScoresPerSaturdayAndAccumulate() {
 		Aluno ana = aluno(1L, "Ana");
 		Aluno bruno = aluno(2L, "Bruno");
-		Encontro sabado1 = encontro(10L, 1);
-		Encontro sabado2 = encontro(11L, 2);
+		Sabado sabado1 = sabado(10L, 1);
+		Sabado sabado2 = sabado(11L, 2);
 
 		List<Nota> notas = List.of(
 				nota(1L, 10L, "10"),
@@ -47,18 +47,18 @@ class EvolucaoPontuacaoCalculatorTest {
 		return aluno;
 	}
 
-	private static Encontro encontro(Long id, int numero) {
-		Encontro encontro = new Encontro();
-		encontro.setId(id);
-		encontro.setNumero(numero);
-		encontro.setTitulo("Sábado " + numero);
-		return encontro;
+	private static Sabado sabado(Long id, int numero) {
+		Sabado sabado = new Sabado();
+		sabado.setId(id);
+		sabado.setNumero(numero);
+		sabado.setTitulo("Sábado " + numero);
+		return sabado;
 	}
 
-	private static Nota nota(Long alunoId, Long encontroId, String valor) {
+	private static Nota nota(Long alunoId, Long sabadoId, String valor) {
 		Nota nota = new Nota();
 		nota.setAlunoId(alunoId);
-		nota.setEncontroId(encontroId);
+		nota.setSabadoId(sabadoId);
 		nota.setCriterioId(1L);
 		nota.setValor(new BigDecimal(valor));
 		return nota;
