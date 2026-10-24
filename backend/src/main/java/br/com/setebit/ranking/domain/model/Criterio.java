@@ -1,7 +1,9 @@
 package br.com.setebit.ranking.domain.model;
 
 import java.math.BigDecimal;
+import lombok.Data;
 
+@Data
 public class Criterio {
 
 	private Long id;
@@ -9,44 +11,4 @@ public class Criterio {
 	private String nome;
 	private int ordem;
 	private BigDecimal pontuacaoMaxima = BigDecimal.TEN;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getTrimestreId() {
-		return trimestreId;
-	}
-
-	public void setTrimestreId(Long trimestreId) {
-		this.trimestreId = trimestreId;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public int getOrdem() {
-		return ordem;
-	}
-
-	public void setOrdem(int ordem) {
-		this.ordem = ordem;
-	}
-
-	public BigDecimal getPontuacaoMaxima() {
-		return pontuacaoMaxima;
-	}
-
-	public void setPontuacaoMaxima(BigDecimal pontuacaoMaxima) {
-		this.pontuacaoMaxima = pontuacaoMaxima;
-	}
 }

@@ -8,7 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDate;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(
 		name = "sabados",
@@ -29,44 +31,4 @@ public class SabadoJpaEntity {
 
 	@Column(nullable = false, length = 120)
 	private String titulo;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getTrimestreId() {
-		return trimestreId;
-	}
-
-	public void setTrimestreId(Long trimestreId) {
-		this.trimestreId = trimestreId;
-	}
-
-	public int getNumero() {
-		return numero;
-	}
-
-	public void setNumero(int numero) {
-		this.numero = numero;
-	}
-
-	public LocalDate getData() {
-		return data;
-	}
-
-	public void setData(LocalDate data) {
-		this.data = data;
-	}
-
-	public String getTitulo() {
-		return titulo;
-	}
-
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
 }
