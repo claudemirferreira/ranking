@@ -5,6 +5,8 @@ Backend Spring Boot para controlar as notas/pontuações dos alunos que frequent
 
 Referência de domínio: planilha "Tabela de Pontuação – Classe dos Juvenis", com alunos em linhas e sábados (1–13) em colunas, pontos por encontro e total/ranking.
 
+Como funciona cada trimestre da Escola Sabatina (13 sábados, lição, 13º sábado e cartão de pontos): `doc/PROMPT_ESCOLA_SABATINA.md`.
+
 Projeto atual:
 - Path: `c:\work\setebit\ranking\backend`
 - Stack: **Spring Boot 4.0.x**, **Java 25**, Spring Web MVC (`spring-boot-starter-webmvc`), Spring Data JPA, MySQL 8.4
