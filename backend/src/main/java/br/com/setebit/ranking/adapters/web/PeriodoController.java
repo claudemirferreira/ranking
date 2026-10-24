@@ -5,11 +5,15 @@ import br.com.setebit.ranking.adapters.web.dto.CriterioRequest;
 import br.com.setebit.ranking.adapters.web.dto.PeriodoRequest;
 import br.com.setebit.ranking.application.dto.CriterioResponse;
 import br.com.setebit.ranking.application.dto.EncontroResponse;
+import br.com.setebit.ranking.application.dto.EvolucaoPontuacaoResponse;
 import br.com.setebit.ranking.application.dto.NotaResponse;
+import br.com.setebit.ranking.application.dto.PerdaPontuacaoResponse;
 import br.com.setebit.ranking.application.dto.PeriodoResponse;
 import br.com.setebit.ranking.application.dto.RankingItemResponse;
 import br.com.setebit.ranking.application.port.in.ExportLancamentoPdfUseCase;
 import br.com.setebit.ranking.application.port.in.ExportRankingPdfUseCase;
+import br.com.setebit.ranking.application.port.in.GetEvolucaoPontuacaoUseCase;
+import br.com.setebit.ranking.application.port.in.GetPerdaPontuacaoUseCase;
 import br.com.setebit.ranking.application.port.in.GetRankingUseCase;
 import br.com.setebit.ranking.application.port.in.ManageNotaUseCase;
 import br.com.setebit.ranking.application.port.in.ManagePeriodoUseCase;
@@ -37,6 +41,8 @@ public class PeriodoController {
 	private final ManagePeriodoUseCase managePeriodoUseCase;
 	private final ManageNotaUseCase manageNotaUseCase;
 	private final GetRankingUseCase getRankingUseCase;
+	private final GetEvolucaoPontuacaoUseCase getEvolucaoPontuacaoUseCase;
+	private final GetPerdaPontuacaoUseCase getPerdaPontuacaoUseCase;
 	private final ExportRankingPdfUseCase exportRankingPdfUseCase;
 	private final ExportLancamentoPdfUseCase exportLancamentoPdfUseCase;
 
@@ -44,11 +50,15 @@ public class PeriodoController {
 			ManagePeriodoUseCase managePeriodoUseCase,
 			ManageNotaUseCase manageNotaUseCase,
 			GetRankingUseCase getRankingUseCase,
+			GetEvolucaoPontuacaoUseCase getEvolucaoPontuacaoUseCase,
+			GetPerdaPontuacaoUseCase getPerdaPontuacaoUseCase,
 			ExportRankingPdfUseCase exportRankingPdfUseCase,
 			ExportLancamentoPdfUseCase exportLancamentoPdfUseCase) {
 		this.managePeriodoUseCase = managePeriodoUseCase;
 		this.manageNotaUseCase = manageNotaUseCase;
 		this.getRankingUseCase = getRankingUseCase;
+		this.getEvolucaoPontuacaoUseCase = getEvolucaoPontuacaoUseCase;
+		this.getPerdaPontuacaoUseCase = getPerdaPontuacaoUseCase;
 		this.exportRankingPdfUseCase = exportRankingPdfUseCase;
 		this.exportLancamentoPdfUseCase = exportLancamentoPdfUseCase;
 	}
@@ -118,6 +128,18 @@ public class PeriodoController {
 			@RequestParam(required = false) Long encontroId,
 			@RequestParam(required = false) Long criterioId) {
 		return manageNotaUseCase.listByPeriodo(periodoId, encontroId, criterioId);
+	}
+
+	@GetMapping("/api/periodos/{periodoId}/evolucao")
+	@Operation(summary = "Evolução da pontuação dos alunos por sábado")
+	public EvolucaoPontuacaoResponse evolucao(@PathVariable Long periodoId) {
+		return getEvolucaoPontuacaoUseCase.execute(periodoId);
+	}
+
+	@GetMapping("/api/periodos/{periodoId}/perdas")
+	@Operation(summary = "Onde os alunos perdem mais pontos no período")
+	public PerdaPontuacaoResponse perdas(@PathVariable Long periodoId) {
+		return getPerdaPontuacaoUseCase.execute(periodoId);
 	}
 
 	@GetMapping("/api/periodos/{periodoId}/ranking")
