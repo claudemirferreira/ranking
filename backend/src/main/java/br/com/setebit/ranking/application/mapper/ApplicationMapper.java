@@ -34,6 +34,7 @@ public final class ApplicationMapper {
 				aluno.getTurmaId(),
 				aluno.getNumero(),
 				aluno.getNome(),
+				aluno.getDataNascimento(),
 				aluno.isAtivo(),
 				aluno.getCreatedAt(),
 				aluno.getUpdatedAt());

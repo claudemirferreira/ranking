@@ -50,4 +50,9 @@ public class NotaRepositoryAdapter implements NotaRepositoryPort {
 	public List<Nota> findByAlunoIdAndPeriodoId(Long alunoId, Long periodoId) {
 		return repository.findByAlunoIdAndPeriodoId(alunoId, periodoId).stream().map(JpaMapper::toDomain).toList();
 	}
+
+	@Override
+	public void deleteByAlunoId(Long alunoId) {
+		repository.deleteByAlunoId(alunoId);
+	}
 }

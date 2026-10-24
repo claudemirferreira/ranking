@@ -8,6 +8,8 @@ public interface AlunoRepositoryPort {
 
 	Aluno save(Aluno aluno);
 
+	void deleteById(Long id);
+
 	Optional<Aluno> findById(Long id);
 
 	List<Aluno> findAll();

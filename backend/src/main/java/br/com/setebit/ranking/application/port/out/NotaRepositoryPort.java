@@ -17,4 +17,6 @@ public interface NotaRepositoryPort {
 	List<Nota> findByPeriodoIdFiltered(Long periodoId, Long encontroId, Long criterioId);
 
 	List<Nota> findByAlunoIdAndPeriodoId(Long alunoId, Long periodoId);
+
+	void deleteByAlunoId(Long alunoId);
 }

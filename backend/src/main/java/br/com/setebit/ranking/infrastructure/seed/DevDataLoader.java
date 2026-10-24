@@ -59,7 +59,7 @@ public class DevDataLoader implements ApplicationRunner {
 						new SeedAluno(14, "João Pedro"),
 						new SeedAluno(15, "João Lucas"),
 						new SeedAluno(22, "João Arthur"))
-				.forEach(a -> manageAlunoUseCase.create(turma.id(), a.numero(), a.nome()));
+				.forEach(a -> manageAlunoUseCase.create(turma.id(), a.numero(), a.nome(), null));
 
 		var periodo = managePeriodoUseCase.create(turma.id(), "Lição 3", null, null);
 		managePeriodoUseCase.createEncontros(periodo.id(), 13);

@@ -34,4 +34,6 @@ public interface SpringDataNotaRepository extends JpaRepository<NotaJpaEntity, L
 			  and n.encontroId in (select e.id from EncontroJpaEntity e where e.periodoId = :periodoId)
 			""")
 	List<NotaJpaEntity> findByAlunoIdAndPeriodoId(@Param("alunoId") Long alunoId, @Param("periodoId") Long periodoId);
+
+	void deleteByAlunoId(Long alunoId);
 }

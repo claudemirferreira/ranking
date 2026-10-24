@@ -23,6 +23,11 @@ public class AlunoRepositoryAdapter implements AlunoRepositoryPort {
 	}
 
 	@Override
+	public void deleteById(Long id) {
+		repository.deleteById(id);
+	}
+
+	@Override
 	public Optional<Aluno> findById(Long id) {
 		return repository.findById(id).map(JpaMapper::toDomain);
 	}

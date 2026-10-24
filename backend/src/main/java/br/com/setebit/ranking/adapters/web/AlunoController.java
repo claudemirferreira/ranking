@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,7 +51,7 @@ public class AlunoController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@Operation(summary = "Criar aluno na turma")
 	public AlunoResponse create(@PathVariable Long turmaId, @Valid @RequestBody AlunoRequest request) {
-		return manageAlunoUseCase.create(turmaId, request.numero(), request.nome());
+		return manageAlunoUseCase.create(turmaId, request.numero(), request.nome(), request.dataNascimento());
 	}
 
 	@GetMapping("/api/alunos/{id}")
@@ -62,7 +63,14 @@ public class AlunoController {
 	@PutMapping("/api/alunos/{id}")
 	@Operation(summary = "Atualizar aluno")
 	public AlunoResponse update(@PathVariable Long id, @Valid @RequestBody AlunoRequest request) {
-		return manageAlunoUseCase.update(id, request.numero(), request.nome());
+		return manageAlunoUseCase.update(id, request.numero(), request.nome(), request.dataNascimento());
+	}
+
+	@DeleteMapping("/api/alunos/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@Operation(summary = "Excluir aluno e as notas lançadas")
+	public void delete(@PathVariable Long id) {
+		manageAlunoUseCase.delete(id);
 	}
 
 	@PatchMapping("/api/alunos/{id}/ativo")
