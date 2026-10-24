@@ -50,7 +50,7 @@ public class AlunoController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@Operation(summary = "Criar aluno na turma")
 	public AlunoResponse create(@PathVariable Long turmaId, @Valid @RequestBody AlunoRequest request) {
-		return manageAlunoUseCase.create(turmaId, request.nome(), request.dataNascimento());
+		return manageAlunoUseCase.create(turmaId, request.numero(), request.nome());
 	}
 
 	@GetMapping("/api/alunos/{id}")
@@ -62,7 +62,7 @@ public class AlunoController {
 	@PutMapping("/api/alunos/{id}")
 	@Operation(summary = "Atualizar aluno")
 	public AlunoResponse update(@PathVariable Long id, @Valid @RequestBody AlunoRequest request) {
-		return manageAlunoUseCase.update(id, request.nome(), request.dataNascimento());
+		return manageAlunoUseCase.update(id, request.numero(), request.nome());
 	}
 
 	@PatchMapping("/api/alunos/{id}/ativo")

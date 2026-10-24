@@ -6,6 +6,7 @@ import java.util.List;
 public record RankingItemResponse(
 		int posicao,
 		Long alunoId,
+		Integer numero,
 		String nome,
 		BigDecimal total,
 		List<CriterioTotalResponse> porCriterio

@@ -44,22 +44,22 @@ public class DevDataLoader implements ApplicationRunner {
 
 		var turma = manageTurmaUseCase.create("Juvenis", "Classe dos Juvenis — salinha");
 		List.of(
-						"Luísa",
-						"Júlia",
-						"Sofhia",
-						"Adrielly",
-						"Lorena",
-						"Valentina",
-						"Esther",
-						"João",
-						"Isaque",
-						"João Levi",
-						"Vitória",
-						"Manuela",
-						"João Pedro",
-						"João Lucas",
-						"João Arthur")
-				.forEach(nome -> manageAlunoUseCase.create(turma.id(), nome, null));
+						new SeedAluno(1, "Luísa"),
+						new SeedAluno(2, "Júlia"),
+						new SeedAluno(3, "Sofhia"),
+						new SeedAluno(4, "Adrielly"),
+						new SeedAluno(5, "Lorena"),
+						new SeedAluno(6, "Valentina"),
+						new SeedAluno(7, "Esther"),
+						new SeedAluno(9, "João"),
+						new SeedAluno(10, "Isaque"),
+						new SeedAluno(11, "João Levi"),
+						new SeedAluno(12, "Vitória"),
+						new SeedAluno(13, "Manuela"),
+						new SeedAluno(14, "João Pedro"),
+						new SeedAluno(15, "João Lucas"),
+						new SeedAluno(22, "João Arthur"))
+				.forEach(a -> manageAlunoUseCase.create(turma.id(), a.numero(), a.nome()));
 
 		var periodo = managePeriodoUseCase.create(turma.id(), "Lição 3", null, null);
 		managePeriodoUseCase.createEncontros(periodo.id(), 13);
@@ -68,5 +68,8 @@ public class DevDataLoader implements ApplicationRunner {
 		managePeriodoUseCase.createCriterio(periodo.id(), "Critério C", 3, BigDecimal.TEN);
 
 		log.info("Seed concluído: turma Juvenis, 15 alunos, período com 13 sábados e 3 critérios");
+	}
+
+	private record SeedAluno(int numero, String nome) {
 	}
 }

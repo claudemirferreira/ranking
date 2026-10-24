@@ -32,8 +32,8 @@ public final class ApplicationMapper {
 		return new AlunoResponse(
 				aluno.getId(),
 				aluno.getTurmaId(),
+				aluno.getNumero(),
 				aluno.getNome(),
-				aluno.getDataNascimento(),
 				aluno.isAtivo(),
 				aluno.getCreatedAt(),
 				aluno.getUpdatedAt());
