@@ -5,6 +5,7 @@ import br.com.setebit.ranking.application.port.in.ManageTrimestreUseCase;
 import br.com.setebit.ranking.application.port.in.ManageTurmaUseCase;
 import br.com.setebit.ranking.application.port.out.TurmaRepositoryPort;
 import java.math.BigDecimal;
+import java.time.Year;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +62,7 @@ public class DevDataLoader implements ApplicationRunner {
 						new SeedAluno(22, "João Arthur"))
 				.forEach(a -> manageAlunoUseCase.create(turma.id(), a.numero(), a.nome(), null));
 
-		var trimestre = manageTrimestreUseCase.create(turma.id(), "Lição 3", null, null);
+		var trimestre = manageTrimestreUseCase.create(turma.id(), "Lição 3", Year.now().getValue(), null, null);
 		manageTrimestreUseCase.createSabados(trimestre.id(), 13);
 		manageTrimestreUseCase.createCriterio(trimestre.id(), "Critério A", 1, BigDecimal.TEN);
 		manageTrimestreUseCase.createCriterio(trimestre.id(), "Critério B", 2, BigDecimal.TEN);

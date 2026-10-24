@@ -28,7 +28,12 @@ public class TrimestreRepositoryAdapter implements TrimestreRepositoryPort {
 	}
 
 	@Override
+	public Optional<Trimestre> findByTurmaIdAndAnoAndNomeIgnoreCase(Long turmaId, int ano, String nome) {
+		return repository.findByTurmaIdAndAnoAndNomeIgnoreCase(turmaId, ano, nome).map(JpaMapper::toDomain);
+	}
+
+	@Override
 	public List<Trimestre> findByTurmaId(Long turmaId) {
-		return repository.findByTurmaIdOrderByCreatedAtDesc(turmaId).stream().map(JpaMapper::toDomain).toList();
+		return repository.findByTurmaIdOrderByAnoDescNomeAsc(turmaId).stream().map(JpaMapper::toDomain).toList();
 	}
 }

@@ -44,12 +44,16 @@ public class ManageTrimestreUseCaseImpl implements ManageTrimestreUseCase {
 	}
 
 	@Override
-	public TrimestreResponse create(Long turmaId, String nome, LocalDate dataInicio, LocalDate dataFim) {
+	public TrimestreResponse create(Long turmaId, String nome, int ano, LocalDate dataInicio, LocalDate dataFim) {
 		requireTurma(turmaId);
+		requireAno(ano);
+		String nomeLimpo = nome.trim();
+		requireNomeLivre(turmaId, ano, nomeLimpo, null);
 		Instant now = Instant.now();
 		Trimestre trimestre = new Trimestre();
 		trimestre.setTurmaId(turmaId);
-		trimestre.setNome(nome.trim());
+		trimestre.setNome(nomeLimpo);
+		trimestre.setAno(ano);
 		trimestre.setDataInicio(dataInicio);
 		trimestre.setDataFim(dataFim);
 		trimestre.setAtivo(true);
@@ -59,9 +63,13 @@ public class ManageTrimestreUseCaseImpl implements ManageTrimestreUseCase {
 	}
 
 	@Override
-	public TrimestreResponse update(Long id, String nome, LocalDate dataInicio, LocalDate dataFim, Boolean ativo) {
+	public TrimestreResponse update(Long id, String nome, int ano, LocalDate dataInicio, LocalDate dataFim, Boolean ativo) {
 		Trimestre trimestre = requireTrimestre(id);
-		trimestre.setNome(nome.trim());
+		requireAno(ano);
+		String nomeLimpo = nome.trim();
+		requireNomeLivre(trimestre.getTurmaId(), ano, nomeLimpo, id);
+		trimestre.setNome(nomeLimpo);
+		trimestre.setAno(ano);
 		trimestre.setDataInicio(dataInicio);
 		trimestre.setDataFim(dataFim);
 		if (ativo != null) {
@@ -151,5 +159,20 @@ public class ManageTrimestreUseCaseImpl implements ManageTrimestreUseCase {
 	private Trimestre requireTrimestre(Long id) {
 		return trimestreRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Trimestre não encontrado: " + id));
+	}
+
+	private void requireAno(int ano) {
+		if (ano < 2000 || ano > 2100) {
+			throw new BusinessRuleException("Ano do trimestre deve estar entre 2000 e 2100");
+		}
+	}
+
+	private void requireNomeLivre(Long turmaId, int ano, String nome, Long ignoreId) {
+		trimestreRepository.findByTurmaIdAndAnoAndNomeIgnoreCase(turmaId, ano, nome)
+				.filter(found -> ignoreId == null || !ignoreId.equals(found.getId()))
+				.ifPresent(found -> {
+					throw new BusinessRuleException(
+							"Já existe o trimestre \"" + nome + "\" em " + ano + " nesta turma");
+				});
 	}
 }

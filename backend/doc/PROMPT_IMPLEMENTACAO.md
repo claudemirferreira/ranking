@@ -36,7 +36,7 @@ Permitir que professores/dirigentes:
 
 ## Regras de negócio
 - Uma **Turma** (ex.: Juvenis) possui vários **Alunos**.
-- Um **Trimestre** (ex.: "Lição 4") pertence a uma turma e contém vários **Sábados** (Sábado 1…N) com data opcional.
+- Um **Trimestre** (ex.: "Lição 4" de 2026) pertence a uma turma, guarda o **ano** (o mesmo nome se repete todo ano) e contém vários **Sábados** (Sábado 1…N) com data opcional. Na mesma turma, nome + ano não se repetem.
 - Cada trimestre tem um ou mais **Critérios** de pontuação (nome + ordem + pontuação máxima padrão, ex.: 10).
 - Uma **Nota** é única por combinação (aluno + sábado + critério).
 - Valor da nota: numérico decimal; na prática costuma ser 0 ou 10, mas aceitar 0 até o máximo do critério.

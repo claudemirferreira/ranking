@@ -50,8 +50,8 @@ public class ExportRankingPdfUseCaseImpl implements ExportRankingPdfUseCase {
 				.toList();
 
 		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("TITULO", "Ranking — " + trimestre.nome());
-		parameters.put("TRIMESTRE", trimestre.nome());
+		parameters.put("TITULO", "Ranking — " + trimestre.rotulo());
+		parameters.put("TRIMESTRE", trimestre.rotulo());
 		parameters.put("TURMA", turma.nome());
 
 		return rankingPdfReportPort.generate(parameters, rows);

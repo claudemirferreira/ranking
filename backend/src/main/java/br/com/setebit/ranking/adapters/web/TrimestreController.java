@@ -73,7 +73,8 @@ public class TrimestreController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@Operation(summary = "Criar trimestre")
 	public TrimestreResponse create(@PathVariable Long turmaId, @Valid @RequestBody TrimestreRequest request) {
-		return manageTrimestreUseCase.create(turmaId, request.nome(), request.dataInicio(), request.dataFim());
+		return manageTrimestreUseCase.create(
+				turmaId, request.nome(), request.ano(), request.dataInicio(), request.dataFim());
 	}
 
 	@GetMapping("/api/trimestres/{id}")
@@ -85,7 +86,8 @@ public class TrimestreController {
 	@PutMapping("/api/trimestres/{id}")
 	@Operation(summary = "Atualizar trimestre")
 	public TrimestreResponse update(@PathVariable Long id, @Valid @RequestBody TrimestreRequest request) {
-		return manageTrimestreUseCase.update(id, request.nome(), request.dataInicio(), request.dataFim(), request.ativo());
+		return manageTrimestreUseCase.update(
+				id, request.nome(), request.ano(), request.dataInicio(), request.dataFim(), request.ativo());
 	}
 
 	@PostMapping("/api/trimestres/{id}/sabados")

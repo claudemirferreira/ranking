@@ -74,7 +74,7 @@ O cartão é um recurso pedagógico local, comum nas divisões infantis e de juv
 ## Como isto vira dado no sistema
 
 - **Turma**: uma faixa (ex.: Juvenis).
-- **Trimestre**: o ciclo de 13 sábados (ex.: “Lição 4”), com início e fim.
+- **Trimestre**: o ciclo de 13 sábados (ex.: “Lição 4”), com o ano, porque o mesmo trimestre se repete todo ano, e com início e fim.
 - **Sabado**: um dos 13 sábados (`numero` 1–13, título “Sábado N”). O sábado 13 é o fechamento e a oferta do 13º sábado.
 - **Critério**: um item do cartão, com ordem e pontuação máxima. Os nomes acima são o conjunto usual; a igreja pode cadastrar outros.
 - **Nota**: valor daquele aluno, naquele sábado, naquele critério. Na prática costuma ser 0 ou a nota máxima, e o sistema aceita qualquer valor de 0 até o máximo.

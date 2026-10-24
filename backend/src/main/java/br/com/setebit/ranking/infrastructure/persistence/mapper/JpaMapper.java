@@ -73,6 +73,7 @@ public final class JpaMapper {
 		trimestre.setId(entity.getId());
 		trimestre.setTurmaId(entity.getTurmaId());
 		trimestre.setNome(entity.getNome());
+		trimestre.setAno(entity.getAno());
 		trimestre.setDataInicio(entity.getDataInicio());
 		trimestre.setDataFim(entity.getDataFim());
 		trimestre.setAtivo(entity.isAtivo());
@@ -86,6 +87,7 @@ public final class JpaMapper {
 		entity.setId(domain.getId());
 		entity.setTurmaId(domain.getTurmaId());
 		entity.setNome(domain.getNome());
+		entity.setAno(domain.getAno());
 		entity.setDataInicio(domain.getDataInicio());
 		entity.setDataFim(domain.getDataFim());
 		entity.setAtivo(domain.isAtivo());

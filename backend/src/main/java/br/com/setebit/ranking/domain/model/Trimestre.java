@@ -8,6 +8,7 @@ public class Trimestre {
 	private Long id;
 	private Long turmaId;
 	private String nome;
+	private int ano;
 	private LocalDate dataInicio;
 	private LocalDate dataFim;
 	private boolean ativo = true;
@@ -36,6 +37,14 @@ public class Trimestre {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public int getAno() {
+		return ano;
+	}
+
+	public void setAno(int ano) {
+		this.ano = ano;
 	}
 
 	public LocalDate getDataInicio() {

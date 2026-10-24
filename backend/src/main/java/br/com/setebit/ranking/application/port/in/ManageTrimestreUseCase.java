@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface ManageTrimestreUseCase {
 
-	TrimestreResponse create(Long turmaId, String nome, LocalDate dataInicio, LocalDate dataFim);
+	TrimestreResponse create(Long turmaId, String nome, int ano, LocalDate dataInicio, LocalDate dataFim);
 
-	TrimestreResponse update(Long id, String nome, LocalDate dataInicio, LocalDate dataFim, Boolean ativo);
+	TrimestreResponse update(Long id, String nome, int ano, LocalDate dataInicio, LocalDate dataFim, Boolean ativo);
 
 	TrimestreResponse getById(Long id);
 

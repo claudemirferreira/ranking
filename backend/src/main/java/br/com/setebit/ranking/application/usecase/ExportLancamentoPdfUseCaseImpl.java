@@ -87,7 +87,7 @@ public class ExportLancamentoPdfUseCaseImpl implements ExportLancamentoPdfUseCas
 
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("TITULO", "Lançamento — " + sabadoTitulo);
-		parameters.put("TRIMESTRE", trimestre.nome());
+		parameters.put("TRIMESTRE", trimestre.rotulo());
 		parameters.put("TURMA", turma.nome());
 		parameters.put("SABADO", sabadoTitulo);
 

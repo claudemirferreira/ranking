@@ -10,5 +10,7 @@ public interface TrimestreRepositoryPort {
 
 	Optional<Trimestre> findById(Long id);
 
+	Optional<Trimestre> findByTurmaIdAndAnoAndNomeIgnoreCase(Long turmaId, int ano, String nome);
+
 	List<Trimestre> findByTurmaId(Long turmaId);
 }

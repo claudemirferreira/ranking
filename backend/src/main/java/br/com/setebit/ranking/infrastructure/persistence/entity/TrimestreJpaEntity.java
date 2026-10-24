@@ -8,11 +8,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.time.Instant;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "trimestres")
+@Table(
+		name = "trimestres",
+		uniqueConstraints = @UniqueConstraint(
+				name = "uk_trimestre_turma_ano_nome",
+				columnNames = {"turma_id", "ano", "nome"}))
 public class TrimestreJpaEntity {
 
 	@Id
@@ -24,6 +29,9 @@ public class TrimestreJpaEntity {
 
 	@Column(nullable = false, length = 120)
 	private String nome;
+
+	@Column(nullable = false)
+	private int ano;
 
 	private LocalDate dataInicio;
 
@@ -74,6 +82,14 @@ public class TrimestreJpaEntity {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public int getAno() {
+		return ano;
+	}
+
+	public void setAno(int ano) {
+		this.ano = ano;
 	}
 
 	public LocalDate getDataInicio() {

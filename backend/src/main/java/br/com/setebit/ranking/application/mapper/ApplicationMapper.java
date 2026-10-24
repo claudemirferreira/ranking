@@ -45,6 +45,7 @@ public final class ApplicationMapper {
 				trimestre.getId(),
 				trimestre.getTurmaId(),
 				trimestre.getNome(),
+				trimestre.getAno(),
 				trimestre.getDataInicio(),
 				trimestre.getDataFim(),
 				trimestre.isAtivo(),
